@@ -1,0 +1,22 @@
+{
+	"DEBUG":false,
+	"DB":{
+		"type":"sqlite",
+		"name":"",
+		"host":"../data/data.db",
+		"port":"",
+		"user":"user",
+		"password":"password"
+	},
+	"lang":{
+		"default":"en",
+		"avail":["fr","en"]
+	}
+}
+
+
+
+
+
+
+

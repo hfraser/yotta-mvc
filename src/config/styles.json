@@ -1,0 +1,16 @@
+{
+	"css":[
+		{
+			"path":"main.css",
+			"media":"screen"
+		},
+		{
+			"path":"print.css",
+			"media":"print"
+		}
+	],
+	"js":[
+		"jquery-1.8.0.min.js",
+		"main.js"
+	]
+}

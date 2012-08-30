@@ -1,0 +1,22 @@
+{
+	"DEBUG":@@envconf.debug@@,
+	"DB":{
+		"type":"@@envconf.db.type@@",
+		"name":"@@envconf.db.name@@",
+		"host":"@@envconf.db.host@@",
+		"port":"@@envconf.db.port@@",
+		"user":"@@envconf.db.username@@",
+		"password":"@@envconf.db.password@@"
+	},
+	"lang":{
+		"default":"en",
+		"avail":["fr","en"]
+	}
+}
+
+
+
+
+
+
+

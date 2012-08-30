@@ -1,0 +1,88 @@
+#!/usr/bin/php
+<?php
+// validate that we are running from a shell command
+if (!defined('STDIN')) {
+	die("This script is made to be ran only from the shell");
+}
+require_once('src/bootstrap.php');
+require_once('bin/shellColor.php');
+
+/**
+ * register the proper autoloader
+ */
+$gAutoload->addLoader("binLoader");
+$myOpts = getopt('c:');
+
+if (!isset($argv[1]) || !isset($myOpts['c'])) {
+	getScriptInfo();
+}
+
+// load the proper actions and set the party
+list($gTask, $gAction) = explode(':',$myOpts['c']);
+$gTask = loadTask($gTask);
+$gTask->parseOpts($gAction, getopt('c:', $gTask->getOpts($gAction)));
+$gTask->$gAction();
+
+/**
+ * Output the information for this shell script.
+ * 
+ * @return void
+ */
+function getScriptInfo()
+{
+	echocs("ERROR : MISSING ARGUMENT", "red");
+	echocs("	Usage : -c MODULE:TASK [OPTIONS]", 'green');
+	echocs("The following tasks are available under this script", 'blue');
+	/**
+	 * Available tasks
+	 *
+	 * @var array
+	 */
+	$tasks = glob('bin/*.task.php');
+	foreach ($tasks as $value) {
+		$myTaskName = str_replace(array("bin" . DS, ".task.php"), '',$value);
+		$myTask = loadTask($myTaskName);
+		$myTask->getInfo();
+	}
+	die();
+}
+
+/**
+ * Load a specific task.
+ * 
+ * @param string $aTaskName Name of the task.
+ * 
+ * @return ATask
+ */
+function loadTask($aTaskName)
+{
+	$myTaskFile = 'bin' . DS . "{$aTaskName}.task.php";
+	//var_dump($myTaskFile);
+	if (file_exists($myTaskFile)) {
+		$myClassName = 'bin\\' . $aTaskName;
+		include_once($myTaskFile);
+		return new $myClassName;
+	}
+	echocs("ERROR : Call to undefined task :" . $aTaskName, 'red');
+	getScriptInfo();
+}
+
+/**
+ * Loader for bin classes under the bin namespace relevant to shell tasks.
+ * 
+ * @param string $aClassName Name of the class we desire to load.
+ * 
+ * @return boolean
+ */
+function binLoader($aClassName)
+{
+	$myClass = str_replace("\\", DS, $aClassName);
+	if (strpos($myClass, "bin") === 0) {
+		$myFile = "{$myClass}.php";
+		if (file_exists($myFile)) {
+			require_once($myFile);
+		}
+		return true;
+	}
+	return false;
+}

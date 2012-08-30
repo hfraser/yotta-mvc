@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ======================================================================
+	2012-03-29 PM
+
+	C-Mantix-Ultralight
+
+	This file contains all the base builds for @{FD}.
+	In order to use this build phing is required to be installed
+	====================================================================== -->
+<project name="CM-Ultralight" default="main">
+	<!--
+	set envconf variable in order to match the evironment we are building in.
+	This value will default to "dev" if no environment are set
+	-->
+	<if>
+		<isset property="envconf" />
+		<else>
+			<property name="envconf" value="dev" />
+		</else>
+	</if>
+
+	<property file="${project.basedir}/build.properties" />
+
+	<target name="clean">
+		<echo level="info" msg="Cleaning..." />
+		<echo level="info" msg="    Removing Build Dir!" />
+		<delete dir="${builddir}" />
+	</target>
+
+	<!-- Preapare build dir -->
+	<target name="prepare" description="Prepare the proper build environement">
+		<!-- Load tagret environement configuration -->
+		<property file="${project.basedir}/buildconf/build.${envconf}.properties" />
+		<!--
+		Validate that we are running in a Jenkins / Hudson environement.
+		And set variable appropriately.
+		-->
+		<if>
+			<and>
+				<isset property="env.BUILD_NUMBER" />
+				<isset property="env.JOB_NAME" />
+			</and>
+			<else>
+				<if>
+					<isset property="host.name" />
+					<then>
+						<property name="env.JOB_NAME" value="DEV-${host.name}" override="yes" />
+					</then>
+					<else>
+						<property name="env.JOB_NAME" value="DEV-${os.name}" override="yes" />
+					</else>
+				</if>
+				<property name="env.BUILD_NUMBER" value="DEV-${DSTAMP}-${TSTAMP}" override="yes" />
+				<!-- unquote the following line if you are running in an svn environement -->
+				<!-- <svnlastrevision svnpath="${envconf.svnpath}" workingcopy="${project.basedir}" propertyname="env.SVN_REVISION" /> -->
+			</else>
+		</if>
+		<if>
+			<not>
+				<available file="${builddir}" />
+			</not>
+			<then>
+				<echo level="info" msg="Preparing..." />
+				<echo level="info" msg="    Creating ${builddir} !" />
+				<mkdir dir="${builddir}" />
+				<echo level="info" msg="    Creating ${logdir} !" />
+				<mkdir dir="${logdir}" />
+				<mkdir dir="${release.dir}/" />
+			</then>
+		</if>
+		<property name="rlname" value="cmul_${env.BUILD_NUMBER}" />
+	</target>
+
+	<target name="main" depends="clean, prepare" description="build the main application">
+		<echo level="info" msg="Building ${envconf} ..." />
+		<echo level="info" msg="    Copying clean code from src ..." />
+		<mkdir dir="${release.dir}/" />
+		<copy todir="${release.dir}/" overwrite="true">
+			<fileset dir="${srcdir}/">
+				<include name="**" />
+				<exclude name="**/.svn/**" />
+			</fileset>
+		</copy>
+		<phingcall target="set-config" />
+		<phingcall target="version-create" />
+	</target>
+
+	<target name="package" depends="main" description="Create a distribution package ready for deployment">
+		<!-- create distribution package -->
+		<echo level="info" msg="Creating Distribution Package ...${release.dir}" />
+		<tar destfile="${builddir}/${rlname}.tgz" basedir="${release.dir}" compression="gzip" />
+	</target>
+
+	<target name="make-config" description="Create temporary config file">
+		<echo level="info" msg="Making temporary configuration file ..." />
+		<copy file="${project.basedir}/buildconf/config.json" tofile="${project.basedir}/buildconf/new_config.json" overwrite="true">
+			<filterchain>
+				<replacetokens begintoken="@@" endtoken="@@">
+					<token key="envconf.debug" value="${envconf.debug}" />
+					<token key="envconf.db.type" value="${envconf.db.type}" />
+					<token key="envconf.db.host" value="${envconf.db.host}" />
+					<token key="envconf.db.port" value="${envconf.db.port}" />
+					<token key="envconf.db.username" value="${envconf.db.username}" />
+					<token key="envconf.db.password" value="${envconf.db.password}" />
+					<token key="envconf.db.name" value="${envconf.db.name}" />
+				</replacetokens>
+			</filterchain>
+		</copy>
+	</target>
+
+	<target name="set-config" depends="make-config">
+		<echo level="info" msg="    Copy configuration to build ..." />
+		<move file="${project.basedir}/buildconf/new_config.json" tofile="${release.dir}/config/config.json" overwrite="true" />
+	</target>
+
+	<target name="update-config" description="update the local configuration for dev">
+		<echo level="info" msg="    Updating local configuration" />
+		<property file="${project.basedir}/buildconf/build.local.properties" />
+		<phingcall target="make-config" />
+		<move file="${project.basedir}/buildconf/new_config.json" tofile="${project.basedir}/src/config/config.json" overwrite="true" />
+	</target>
+
+	<!-- Create version file for the build -->
+	<target name="version-create" description="Create a version description file. Should not be called unless main has been called">
+		<echo level="info" msg="    Create version.txt file ..." />
+		<echo file="${release.dir}/version.txt">job : ${env.JOB_NAME}
+build : ${env.BUILD_NUMBER}</echo>
+		<tstamp>
+			<format property="DATE" pattern="%c" />
+		</tstamp>
+		<echo file="${release.dir}/version.txt">date : ${DATE}</echo>
+		<!-- unquote the following line if you are running in an svn environement -->
+		<if>
+			<isset property="env.SVN_REVISION" />
+			<then>
+				<echo file="${release.dir}/version.txt">revision : ${env.SVN_REVISION}</echo>
+			</then>
+		</if>
+	</target>
+
+	<!-- PHP Documentation of this project-->
+	<target name="phpdoc" depends="prepare" description="PHP Documentation of this project">
+		<echo level="info" msg="Creating PHP Documentation" />
+		<echo level="info" msg="    Creating Build Dir / docs!" />
+		<mkdir dir="${docdir}" />
+		<phpdoc title="CM-Ultralight Code Documentation" quiet="true" destdir="${docdir}" sourcecode="yes" defaultcategoryname="CM-Ultralight" defaultpackagename="CM-Ultralight" output="HTML:frames:DOM/l0l33t">
+			<fileset dir="${project.basedir}/">
+				<include name="**" />
+				<exclude name="src/pages/**" />
+				<exclude name="build/**" />
+			</fileset>
+			<projdocfileset dir=".">
+				<include name="README" />
+			</projdocfileset>
+		</phpdoc>
+	</target>
+
+	<!-- PHP copy/paste analysis -->
+	<target name="phpcpd" depends="prepare" description="PHP copy/paste analysis">
+		<echo level="info" msg="PHP Copy/Paste Detector..." />
+		<phpcpd>
+			<fileset dir="${project.basedir}/">
+				<include name="**/*.php" />
+				<exclude name="**/*.js" />
+				<exclude name="**/R.php" />
+				<exclude name="build/**" />
+			</fileset>
+			<formatter type="pmd" outfile="${builddir}/logs/cpd-pmd.xml" />
+		</phpcpd>
+	</target>
+
+	<!-- PHP dependency analysis -->
+	<target name="pdepend" depends="prepare" description="PHP dependency analysis">
+		<echo level="info" msg="PHP Depend..." />
+		<touch file="${logdir}/jdepend.xml" />
+		<phpdepend>
+			<fileset dir="${project.basedir}/">
+				<include name="**/*.php" />
+				<exclude name="**/R.php" />
+				<exclude name="build/**" />
+			</fileset>
+			<logger type="jdepend-xml" outfile="${logdir}/jdepend.xml" />
+		</phpdepend>
+	</target>
+
+	<!-- PHP Project mess detection -->
+	<target name="phpmd" depends="prepare" description="PHP Project mess detection">
+		<echo level="info" msg="PHP Project Mess Detector ..." />
+		<phpmd>
+			<fileset dir="${project.basedir}/">
+				<include name="**/*.php" />
+				<exclude name="**/R.php" />
+				<exclude name="build/**" />
+			</fileset>
+			<formatter type="xml" outfile="${logdir}/pmd.xml" />
+		</phpmd>
+	</target>
+
+	<!-- PHP Checkstyle -->
+	<target name="checkstyle" depends="prepare" description="PHP Checkstyle">
+		<echo level="info" msg="Checking style ..." />
+		<phpcodesniffer standard="Cmantix" showSniffs="true" showWarnings="true">
+			<fileset dir="./">
+				<include name="**/*.php" />
+				<exclude name="**/R.php" />
+				<exclude name="**/src/pages/**.php" />
+				<exclude name="build/**" />
+			</fileset>
+			<formatter type="default" usefile="false" />
+			<formatter type="checkstyle" outfile="${logdir}/checkstyle.xml" />
+		</phpcodesniffer>
+	</target>
+	
+	<target name="validate-source" description="Validate all the current code">
+		<phingcall target="phpdoc" />
+		<phingcall target="checkstyle" />
+		<phingcall target="phpmd" />
+		<phingcall target="pdepend" />
+		<phingcall target="phpcpd" />
+	</target>
+</project>

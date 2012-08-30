@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<xsd:annotation>
+		<xsd:documentation>
+			This schema is designed to do data validation
+			mostly used for forms
+			version : Release: 1.0
+			author : Hans-Frederic
+			Fraser [hffraser@gmail.com]
+			copyright : 2012 Hans-Frederic Fraser
+			license : http://www.gnu.org/licenses/gpl-3.0-standalone.html gpl-3.0
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="validation">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:choice>
+					<xsd:element name="money">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:decimal">
+								<xsd:minInclusive value="0.00" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="checkbox">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration value="true" />
+								<xsd:enumeration value="false" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="yesno">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:integer">
+								<xsd:enumeration value="0" />
+								<xsd:enumeration value="1" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="ranking">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:integer">
+								<xsd:minInclusive value="1" />
+								<xsd:maxInclusive value="5" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="agreement">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:enumeration value="true" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="int">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:integer">
+								<xsd:minInclusive value="1" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="limit">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:integer">
+								<xsd:minInclusive value="1" />
+								<xsd:maxInclusive value="100" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="multiLineString">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="phone">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1" />
+								<xsd:maxLength value="60" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="time">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:pattern value="([0-9]{2})+:([0-9]{2})+:([0-9]{2})+" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+
+					<xsd:element name="date">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:pattern value="([0-9]{4})+-([0-9]{2})+-([0-9]{2})+" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="forcedString">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1" />
+								<xsd:maxLength value="500" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="string250">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1" />
+								<xsd:maxLength value="250" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="string500">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1" />
+								<xsd:maxLength value="500" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="string1000">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:minLength value="1" />
+								<xsd:maxLength value="1000" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="email">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:pattern
+									value="([\.a-z0-9_\-]{1,30})+@([a-z0-9_\-]{1,30})+(([a-z0-9_\-.]{3,30})*\.([a-z0-9]{2,3})+)+" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+					<xsd:element name="url">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:anyURI">
+								<xsd:pattern value="http://.*" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+
+					<xsd:element name="timestamp">
+						<xsd:simpleType>
+							<xsd:restriction base="xsd:string">
+								<xsd:pattern
+									value="[0-9]{4}-[0-9]{1,2}-[0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}(\.[0-9]{0,6})?" />
+							</xsd:restriction>
+						</xsd:simpleType>
+					</xsd:element>
+
+				</xsd:choice>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

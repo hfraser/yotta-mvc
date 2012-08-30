@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+	<title>C-Mantix Ultralight</title>
+	<parser>
+		<target>build/docs/</target>
+		<default-package-name>CmantixUl</default-package-name>
+		 <extensions>
+            <extension>php</extension>
+            <extension>phtml</extension>
+        </extensions>
+	</parser>
+	<transformer>
+		<target>build/docs/</target>
+		<external-class-documentation>
+			<prefix>RedBean_</prefix>
+			<uri>http://www.redbeanphp.com/manual/</uri>
+		</external-class-documentation>
+	</transformer>
+	<transformations>
+        <template name="responsive" />
+    </transformations>
+	<files>
+		<file>bin/*</file>
+		<file>bin/cmantix</file>
+		<directory>src</directory>
+		<ignore>*/R.php</ignore>
+		<ignore>src/pages/*</ignore>
+		<ignore>src/public/index.php</ignore>
+	</files>
+</phpdoc>

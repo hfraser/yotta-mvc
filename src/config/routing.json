@@ -1,0 +1,20 @@
+{
+	"routing":{
+		"index":{
+			"type":"page",
+			"link":"index.php"
+			},
+		"404":{
+			"type":"page",
+			"link":"404.php"
+			},
+		"other-path":{
+			"type":"page",
+			"link":"apage.php"
+			},
+		"suggest":{
+			"type":"service",
+			"link":"SuggestionBox"
+		}
+	}
+}

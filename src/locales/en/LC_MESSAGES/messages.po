@@ -1,0 +1,83 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-08-15 21:45-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/pages/404.php:2
+msgid "404 Page"
+msgstr ""
+
+#: src/pages/apage.php:3 src/pages/includes/header.inc.php:5
+msgid ":title"
+msgstr ""
+
+#: src/pages/forms/SuggestForm.php:3
+msgid "Your Name"
+msgstr ""
+
+#: src/pages/forms/SuggestForm.php:9
+msgid "Your e-mail"
+msgstr ""
+
+#: src/pages/forms/SuggestForm.php:14
+msgid "What the hell do you want to suggest!"
+msgstr ""
+
+#: src/pages/forms/SuggestForm.php:18
+msgid "Send"
+msgstr ""
+
+#: src/pages/forms/SuggestFormSuccess.php:1
+msgid "Bravo you sent something!!!"
+msgstr ""
+
+#: src/pages/index.php:2
+msgid "Hello Speedy!"
+msgstr ""
+
+#: src/services/SuggestionBox.php:52
+msgid "You Need To fill this field!"
+msgstr ""
+
+#: src/services/SuggestionBox.php:53
+msgid "You need to fill this field properly!"
+msgstr ""
+
+#: src/services/SuggestionBox.php:56
+msgid "You Need To fill your name in!"
+msgstr ""
+
+#: src/services/SuggestionBox.php:57
+msgid "You need to fill your name properly!"
+msgstr ""
+
+#: src/services/SuggestionBox.php:60
+msgid "You Need To fill your email!"
+msgstr ""
+
+#: src/services/SuggestionBox.php:61
+msgid "You need to fill your email properly!"
+msgstr ""
+
+#: src/services/SuggestionBox.php:64
+msgid "You Need To add a suggestion!"
+msgstr ""
+
+#: src/services/SuggestionBox.php:65
+msgid ""
+"Your suggestion must be at least 3 characters long and not longer then 1000!"
+msgstr ""

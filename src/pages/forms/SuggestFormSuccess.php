@@ -1,0 +1,1 @@
+<h1><?php echo _('Bravo you sent something!!!'); ?></h1>
