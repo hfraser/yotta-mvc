@@ -1,0 +1,31 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant::Config.run do |config|
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+
+  # Boot with a GUI so you can see the screen. (Default is headless)
+  # config.vm.boot_mode = :gui
+
+  # config.vm.forward_port 80, 8080
+
+  # Base Share
+  config.vm.share_folder "v-data", "/var/www/", "../"
+  
+  # Puppet Provisioning
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "puppet"
+    puppet.module_path = "puppet/modules"
+    puppet.manifest_file  = "init.pp"
+    puppet.options = [
+        '--verbose',
+        '--debug'
+    ]
+  end
+  
+  config.vm.define :web01 do |config|
+    config.vm.box = "precise64"
+    config.vm.network :hostonly, "192.168.99.33"
+    config.vm.host_name = "cmantix.dev.local"
+  end
+end

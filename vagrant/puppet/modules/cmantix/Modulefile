@@ -1,0 +1,9 @@
+name 'hans_frederic_fraser-cmantix'
+version '1.0'
+
+author 'Hans-Frederic Fraser'
+license 'http://www.gnu.org/licenses/gpl-3.0-standalone.html'
+project_page ''
+source ''
+summary 'Install php-fpm and Nginx for Neo C-Mantix ECM'
+description 'This module is designed in order to properly install the full environment needed with Vagrant for the development of Neo C-Mantix ECM.'

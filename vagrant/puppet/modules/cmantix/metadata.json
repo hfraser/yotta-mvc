@@ -1,0 +1,22 @@
+{
+  "name": "hans_frederic_fraser-cmantix",
+  "author": "hans_frederic_fraser",
+  "description": "",
+  "license": "",
+  "project_page": "",
+  "source": "",
+  "summary": "Install php-fpm and Nginx for Neo C-Mantix ECM",
+  "version": "1.0",
+  "checksums": {
+    "Modulefile": "0a349e491cd7cc32c8cc0aab7db12068",
+    "README": "5f1860627823cf89f2a36c3dd67c73e1",
+    "manifests/devtools.pp": "d626765342715b6920d6f871bb61811b",
+    "manifests/init.pp": "41ab0252bb0b2d61a372cdcee3d50d2a",
+    "manifests/nginx.pp": "7f18532fb3803a59b8014c07acaa8ef8",
+    "manifests/php.pp": "752131383c95ba0f689b78bec48a8e3f",
+    "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
+    "spec/spec_helper.rb": "ca19ec4f451ebc7fdb035b52eae6e909",
+    "tests/init.pp": "369fde0a3bf3cb023654bc8b1bee622e"
+  },
+  "dependencies": []
+}
