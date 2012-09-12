@@ -46,7 +46,9 @@ class HtmlHelper
 	 */
 	public function getAllCSS()
 	{
-		$this->getSectionCSS('css');
+		foreach (self::_loadStyles()->css as $key=>$value) {
+			$this->getSectionCSS($key);
+		}
 	}
 
 	/**
@@ -59,8 +61,8 @@ class HtmlHelper
 	 */
 	public function getSectionCSS($aSection)
 	{
-		if (isset(self::_loadStyles()->$aSection)) {
-			$myCSS = self::_loadStyles()->$aSection;
+		if (isset(self::_loadStyles()->css->$aSection)) {
+			$myCSS = self::_loadStyles()->css->$aSection;
 			foreach ($myCSS as $value) {
 				$this->_outputCssTag($value);
 			}
@@ -78,7 +80,9 @@ class HtmlHelper
 	 */
 	public function getAllJS()
 	{
-		$this->getSectionJS('js');
+		foreach (self::_loadStyles()->js as $key=>$value) {
+			$this->getSectionJS($key);
+		}
 	}
 
 	/**
@@ -90,8 +94,8 @@ class HtmlHelper
 	 */
 	public function getSectionJS($aSectionName)
 	{
-		if (isset(self::_loadStyles()->$aSectionName)) {
-			$myJS = self::_loadStyles()->$aSectionName;
+		if (isset(self::_loadStyles()->js->$aSectionName)) {
+			$myJS = self::_loadStyles()->js->$aSectionName;
 			foreach ($myJS as $value) {
 				$this->_outputJsTag($value);
 			}

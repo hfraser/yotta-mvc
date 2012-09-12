@@ -1,1 +1,1 @@
-<h1><?php echo _('Bravo you sent something!!!'); ?></h1>
+<h1><?php echo _('Bravo you submited something!!!'); ?></h1>

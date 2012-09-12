@@ -41,11 +41,13 @@ abstract class AService {
 
 	/**
 	 * Class Constructor.
+	 *
+	 * @param string $aAction The action we want to call this defaults to index if no action is set.
 	 */
-	public function __construct()
+	public function __construct($aAction=null)
 	{
 		$this->helper = new HtmlHelper();
-		$this->call();
+		$this->call($aAction);
 	}
 
 	/**
@@ -53,16 +55,19 @@ abstract class AService {
 	 *
 	 * This function will redistribute the proper calls to the appropriate
 	 * action in order to execute the desired operation.
-	 *
+	 * 
+	 * @param string $aAction The action we want to call this defaults to index if no action is set.
+	 * 
 	 * @return mixed
 	 */
-	public function call()
+	public function call($aAction)
 	{
-		$myAction = (isset($this->_request->path[0]))? '_' . $this->_request->path[0] . 'Action': '_indexAction';
+		if (is_null($aAction)) {
+			$aAction = (isset($this->_request->path[0]))? '_' . $this->_request->path[0] . 'Action': '_indexAction';
+		}
 
-
-		if (method_exists($this, $myAction)) {
-			return $this->$myAction();
+		if (method_exists($this, $aAction)) {
+			return $this->$aAction();
 		}
 		$this->_indexAction();
 	}
@@ -70,11 +75,13 @@ abstract class AService {
 	/**
 	 * Get indexAction values without having the object present.
 	 *
+	 * @param string $aAction The action we want to call this defaults to index if no action is set.
+	 * 
 	 * @return self
 	 */
-	public final static function getIndex()
+	public final static function getIndex($aAction='index')
 	{
-		return new static;
+		return new static($aAction);
 	}
 
 	/**

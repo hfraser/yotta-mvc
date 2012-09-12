@@ -8,10 +8,6 @@
 			"type":"page",
 			"link":"404.php"
 			},
-		"other-path":{
-			"type":"page",
-			"link":"apage.php"
-			},
 		"suggest":{
 			"type":"service",
 			"link":"SuggestionBox"

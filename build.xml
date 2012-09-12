@@ -8,6 +8,11 @@
 	In order to use this build phing is required to be installed
 	====================================================================== -->
 <project name="CM-Ultralight" default="main">
+	<!-- set time stamp values -->
+	<tstamp>
+		<format property="DATE" pattern="%c" />
+	</tstamp>
+	
 	<!--
 	set envconf variable in order to match the evironment we are building in.
 	This value will default to "dev" if no environment are set
@@ -125,9 +130,6 @@
 		<echo level="info" msg="    Create version.txt file ..." />
 		<echo file="${release.dir}/version.txt">job : ${env.JOB_NAME}
 build : ${env.BUILD_NUMBER}</echo>
-		<tstamp>
-			<format property="DATE" pattern="%c" />
-		</tstamp>
 		<echo file="${release.dir}/version.txt">date : ${DATE}</echo>
 		<!-- unquote the following line if you are running in an svn environement -->
 		<if>
