@@ -19,7 +19,9 @@ class cmantix::php {
 		"php5-mcrypt",
 		"php5-xmlrpc",
 		"php5-xsl",
-		"php-pear"
+		"php-pear",
+		"php-gettext",
+		"php5-sqlite"
 	]
 	
 	package {
