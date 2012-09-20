@@ -1,7 +1,11 @@
-# class { cmantix::ondreppa: stage => preinstall}
-# class { apthupdate: stage => pre }
-# class { cmantix::nginx: stage => post }
-# class { cmantix::removeApache: stage => post }
+# c-mantix web node
+stage { [preinstall, pre, post]: }
+Stage[preinstall] -> Stage[pre] -> Stage[main] -> Stage[post]
+
+
+class { apthupdate: stage => pre }
+class { cmantix::nginx: stage => post }
+class { cmantix::removeApache: stage => post }
 
 class apthupdate{
 	exec {"apt-update":
@@ -35,13 +39,4 @@ node 'cmantix.dev.local' {
 	
 	# remove latent apache
 	include cmantix::removeApache
-}
-
-# c-mantix data node
-node 'cmantix.dev.data.local' {
-	# set MOTD To identify machine!.
-	file {
-		'/etc/motd' :
-			content => "Welcome to your C-Mantix ECM Data server.\n"
-	}
 }
