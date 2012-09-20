@@ -16,18 +16,12 @@ class apthupdate{
 
 # c-mantix web node
 node 'cmantix.dev.local' {
-	#stage { [preinstall, pre, post]: }
-	#Stage[preinstall] -> Stage[pre] -> Stage[main] -> Stage[post]
-	
 	# set MOTD To identify machine!.
 	file {
 		'/etc/motd' :
 			content => "Welcome to your C-Mantix ECM Development Machine.\n"
 	}
-	# add php 5.4 repo
-	#include cmantix::ondreppa
-	#include apthupdate
-	
+
 	# install bases
 	include cmantix::bases
 	
