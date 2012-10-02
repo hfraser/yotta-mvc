@@ -1,4 +1,4 @@
-<form id="suggestForm" method="post" action="<?php echo URL_ROOT . $this->_request->lang . "/suggest/submit" ?>">
+<form id="suggestForm" method="post" action="<?php echo $this->_request->basepath . $this->_request->lang . "/suggest/submit" ?>">
 	<input type="text" name="yourname" class="float-left"
 		placeholder="<?php echo _("Your Name"); ?>"
 		value="<?php echo $this->_getData('yourname') ?>" />

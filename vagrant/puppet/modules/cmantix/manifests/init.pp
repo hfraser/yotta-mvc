@@ -25,7 +25,10 @@ class cmantix::bases {
 	$sysPackages = [
 		"build-essential", 
 		"curl",
-		"screen"
+		"screen",
+		"gettext",
+		"language-pack-fr",
+		"language-pack-en"
 	]
 	
 	package {

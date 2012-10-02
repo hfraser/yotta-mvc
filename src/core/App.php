@@ -190,10 +190,14 @@ class App extends ASingleton{
 	 */
 	private function _initGettext()
 	{
-		$myLocale = $this->locales[$this->request->lang];
+		$myLocale = $this->locales[$this->request->lang] . '.utf8';
 		putenv('LANG=' . $myLocale);
 		setlocale(LC_ALL,"");
-		setlocale(LC_MESSAGES,$myLocale);
+		if (!setlocale(LC_MESSAGES,$myLocale)) {
+			$myLocale = $this->locales[$this->request->lang];
+			putenv('LANG=' . $myLocale);
+			setlocale(LC_MESSAGES,$myLocale);
+		}
 		setlocale(LC_CTYPE,$myLocale);
 		bindtextdomain('messages', LOCALES_DIR);
 		bind_textdomain_codeset('messages', 'UTF-8');

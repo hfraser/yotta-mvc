@@ -26,6 +26,14 @@ use core\Patterns\ASingleton;
  */
 class Url extends ASingleton
 {
+	
+	/**
+	 * Base path to the URL Root of this application instalation
+	 * 
+	 * @var string
+	 */
+	public $basepath = '/';
+	
 	/**
 	 * Parsed Url in an array form
 	 *
@@ -48,6 +56,10 @@ class Url extends ASingleton
 	 */
 	protected function __construct()
 	{
+		// set basepath for the application
+		if (isset(App::$config->basepath) && !empty(App::$config->basepath)) {
+			$this->basepath = App::$config->basepath;
+		}
 		$this->_parseUrl();
 	}
 
@@ -111,8 +123,8 @@ class Url extends ASingleton
 		}
 
 		// clean slashes in the url to compensate for user stupidity!!!
-		if (stripos($myPath, URL_ROOT) === 0) {
-			$myPath = substr($myPath, strlen(URL_ROOT),strlen($myPath));
+		if (stripos($myPath, $this->basepath) === 0) {
+			$myPath = substr($myPath, strlen($this->basepath),strlen($myPath));
 			$myReplace = array(
 				'#/(/+)#',
 				'#^/*#',
@@ -171,13 +183,58 @@ class Url extends ASingleton
 	{
 		$aLang = (is_null($aLang))? self::$_request['lang'] : $aLang;
 		if (isset(App::$config->routing->$aRoute) && $aRoute != 'index') {
-			$myUrl = URL_ROOT . $aLang . "/" . $aRoute;
+			$myUrl = $this->basepath . $aLang . "/" . $aRoute;
 			if (!is_null($aAction)) {
 				$myUrl .= "/{$aAction}";
 			}
 			return $myUrl;
 		}
 
-		return URL_ROOT . "{$aLang}/";
+		return $this->basepath . "{$aLang}/";
+	}
+	
+	/**
+	 * Get the current language.
+	 * 
+	 * @return string
+	 */
+	public static function getCurrentLang()
+	{
+		return self::$_request['lang'];
+	}
+	
+	/**
+	 * Get the default language for the application.
+	 * 
+	 * @return string
+	 */
+	public static function getDefaultLang()
+	{
+		return App::$config->lang->default;
+	}
+	
+	/**
+	 * Get all available languages.
+	 * 
+	 * @return array
+	 */
+	public static function getAllLang()
+	{
+		return App::$config->lang->avail;
+	}
+	
+	/**
+	 * Get the full Root URL (explecit http:// ....)
+	 * 
+	 * This will also include the base path of the application.
+	 * 
+	 * @param string $aLanguage Active language code.
+	 * 
+	 * @return string
+	 */
+	public static function getRootUrl($aLanguage = null)
+	{
+		$myLang = (!is_null($aLanguage) && in_array($aLanguage, App::$config->lang->avail))? $aLanguage . '/' : '';
+		return self::$_request['protocol'] . '://' . self::$_request['host'] . self::getInstance()->basepath . $myLang;
 	}
 }

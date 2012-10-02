@@ -12,14 +12,6 @@
  */
 
 /**
- * URL path part that the current project is under if not at the root
- * default should be '/' and vhost should point on public directory
- *
- * @var string
- */
-define('URL_ROOT', '/');
-
-/**
  * Directory seperator shortcut
  *
  * @var string

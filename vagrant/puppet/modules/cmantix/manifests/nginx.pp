@@ -43,6 +43,10 @@ class cmantix::nginx {
 			notify => Service['nginx'],
 			require => [File['cmantix-nginx'], File['default-nginx-disable']]
 	}
+	
+	file { "/var/log/nginx":
+  		mode => 777,
+	}
 }
 
 class cmantix::removeApache {

@@ -1,5 +1,7 @@
 {
 	"DEBUG":@@envconf.debug@@,
+	"minify": @@envconf.minify@@
+	"basepath": "@@envconf.basepath@@"
 	"DB":{
 		"type":"@@envconf.db.type@@",
 		"name":"@@envconf.db.name@@",
