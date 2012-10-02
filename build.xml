@@ -102,6 +102,8 @@
 			<filterchain>
 				<replacetokens begintoken="@@" endtoken="@@">
 					<token key="envconf.debug" value="${envconf.debug}" />
+					<token key="envconf.basepath" value="${envconf.basepath}" />
+					<token key="envconf.minify" value="${envconf.minify}" />
 					<token key="envconf.db.type" value="${envconf.db.type}" />
 					<token key="envconf.db.host" value="${envconf.db.host}" />
 					<token key="envconf.db.port" value="${envconf.db.port}" />

@@ -11,6 +11,8 @@
  * @filesource
  */
 namespace core\Helpers;
+use core\App;
+use core\Url;
 
 /**
  * Base HTML template helper.
@@ -23,8 +25,17 @@ namespace core\Helpers;
  * @package    Core
  * @subpackage Helpers
  */
+
+
 class HtmlHelper
 {
+	
+	/**
+	 * Short link to the URL object
+	 * 
+	 * @var Url
+	 */
+	protected $_request;
 	/**
 	 * Styles config
 	 *
@@ -63,6 +74,12 @@ class HtmlHelper
 	{
 		if (isset(self::_loadStyles()->css->$aSection)) {
 			$myCSS = self::_loadStyles()->css->$aSection;
+			// Get the minified CSS.
+			if(App::$config->minify === true) {
+				$myCSS = $this->_minifyCSS($myCSS);
+			}
+				
+			// output specified CSS files
 			foreach ($myCSS as $value) {
 				$this->_outputCssTag($value);
 			}
@@ -96,6 +113,12 @@ class HtmlHelper
 	{
 		if (isset(self::_loadStyles()->js->$aSectionName)) {
 			$myJS = self::_loadStyles()->js->$aSectionName;
+			// output the minified JS and compressed.
+			if(App::$config->minify === true) {
+				$myJS = $this->_minifyJS($myJS);
+			}
+			
+			// output specified JS files not activated just output the data
 			foreach ($myJS as $value) {
 				$this->_outputJsTag($value);
 			}
@@ -130,7 +153,7 @@ class HtmlHelper
 		if (strpos($aPath, "http://") === 0) {
 			$myPath = $aPath;
 		} else {
-			$myPath = URL_ROOT . 'js/' . $aPath;
+			$myPath = $this->_request->basepath . 'js/' . $aPath;
 		}
 		
 		echo('<script type="text/javascript" src="' . $myPath . "\" ></script>\n");
@@ -148,8 +171,48 @@ class HtmlHelper
 		if (strpos($aCSS->path, "http://") === 0) {
 			$myPath = $aCSS->path;
 		} else {
-			$myPath = URL_ROOT . 'css/' . $aCSS->path;
+			$myPath = $this->_request->basepath . 'css/' . $aCSS->path;
 		}
 		echo('<link rel="stylesheet" href="' . $myPath . '" media="' . $aCSS->media . "\" />\n");
+	}
+	
+	/**
+	 * Hook for JS minification
+	 * 
+	 * @todo implement JS M|inification
+	 * 
+	 * @param \stdClass $aJsList List of javascript to minify
+	 * 
+	 * @return \stdClass
+	 */
+	private function _minifyJS($aJsList)
+	{
+		return $aJsList;
+	}
+	
+	/**
+	 * Hook for CSS minification
+	 * 
+	 * @todo implement CSS M|inification
+	 * 
+	 * @param \stdClass $aCssList List of CSS to minify
+	 * 
+	 * @return \stdClass
+	 */
+	private function _minifyCSS($aCssList)
+	{
+		return $aCssList;
+	}
+	
+	/**
+	 * Get an image path relative to the public/images directory
+	 * 
+	 * @param string $aImg Image name and path
+	 * 
+	 * @return string
+	 */
+	public function getImage($aImg)
+	{
+		return $this->_request->basepath . 'images' . DS . $aImg;
 	}
 }
