@@ -60,14 +60,14 @@ abstract class AService {
 	 * 
 	 * @return mixed
 	 */
-	public function call($aAction)
+	public function call($aAction, $params = null)
 	{
 		if (is_null($aAction)) {
 			$aAction = (isset($this->_request->path[0]))? '_' . $this->_request->path[0] . 'Action': '_indexAction';
 		}
 
 		if (method_exists($this, $aAction)) {
-			return $this->$aAction();
+			return $this->$aAction($params);
 		}
 		$this->_indexAction();
 	}

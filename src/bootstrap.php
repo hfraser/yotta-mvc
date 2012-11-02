@@ -61,6 +61,27 @@ define('ACTION_ROOT', __DIR__ . DS . 'pages' . DS);
 define('SERVICE_ROOT', __DIR__ . DS . 'services' . DS);
 
 /**
+ * Public directory
+ *
+ * @var string
+ */
+define('PUBLIC_ROOT', __DIR__ . DS . 'public' . DS);
+
+/**
+ * Data directory
+ *
+ * @var string
+ */
+define('DATA_DIR', __DIR__ . DS . 'data' . DS);
+
+/**
+ * Cache directory
+ *
+ * @var string
+ */
+define('CM_CACHE', __DIR__ . DS . 'cache' . DS);
+
+/**
  * Include Autoload
  */
 require 'core/Autoload.php';

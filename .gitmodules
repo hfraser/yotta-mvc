@@ -1,0 +1,9 @@
+[submodule "src/libs/jsmin"]
+	path = src/libs/jsmin
+	url = https://github.com/rgrove/jsmin-php/
+[submodule "src/libs/lessphp"]
+	path = src/libs/lessphp
+	url = https://github.com/leafo/lessphp.git
+[submodule "src/libs/cssmin"]
+	path = src/libs/cssmin
+	url = https://github.com/tubalmartin/YUI-CSS-compressor-PHP-port.git
