@@ -50,7 +50,7 @@ class Url extends ASingleton
 		'files'     => array()
 	);
 
-
+	
 	/**
 	 * Url Constructor.
 	 */
@@ -61,8 +61,9 @@ class Url extends ASingleton
 			$this->basepath = App::$config->basepath;
 		}
 		$this->_parseUrl();
+		
 	}
-
+	
 	/**
 	 * Class __get Magic method.
 	 *

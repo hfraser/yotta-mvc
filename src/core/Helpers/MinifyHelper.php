@@ -11,8 +11,8 @@
  * @filesource
  */
 namespace core\Helpers;
+use core\Exceptions\CMPathNotWritable;
 use core\App;
-
 use core\Patterns\ASingleton;
 
 
@@ -31,6 +31,9 @@ use core\Patterns\ASingleton;
 class MinifyHelper extends ASingleton 
 {
 	
+	const CSS_TYPE = 'css';
+	const JS_TYPE = 'js';
+	
 	/**
 	 * Class constructor
 	 */
@@ -44,7 +47,7 @@ class MinifyHelper extends ASingleton
 	 * 
 	 * @return void
 	 */
-	public function minify($aStylesFile)
+	public function minifyStyles($aStylesFile)
 	{
 		// load styles config
 		$myStyles = json_decode(file_get_contents($aStylesFile));
@@ -59,7 +62,7 @@ class MinifyHelper extends ASingleton
 		}
 		// Save new file data
 		$myNewStylesData = json_encode($myStyles);
-		file_put_contents(CM_CACHE . 'styles.min.json', $myNewStylesData);
+		App::writeCacheFile('styles.min.json', $myNewStylesData);
 	}
 
 	/**
@@ -93,7 +96,7 @@ class MinifyHelper extends ASingleton
 		
 		// now that we have our media based parse list we can begin to create the proper minification files.
 		foreach ($parseList as $key => $value) {
-			$parseList[$key] = $this->_minifyCSS($value);
+			$parseList[$key] = '/assets/css/' . $this->_minify($value, self::CSS_TYPE);
 		}
 		
 		// bring it all back together
@@ -105,26 +108,6 @@ class MinifyHelper extends ASingleton
 				);
 		}
 		return $myNewList;
-	}
-	
-	/**
-	 * Minify and concatenate a group of css
-	 * 
-	 * @param array $aFileList List of css file to group and minify
-	 * 
-	 * @return string
-	 */
-	private function _minifyCSS($aFileList)
-	{
-		$myFileData = $this->_concatenateFiles($aFileList, 'css');
-		// minify file content
-		$cssMin = new \CSSmin();
-		$myFileData = $cssMin->run($myFileData);
-		// save file with proper name and hash
-		$myFname = md5($myFileData) . '.css';
-		file_put_contents(PUBLIC_ROOT . 'css' . DS . $myFname, $myFileData);
-		// return filename
-		return $myFname;
 	}
 	
 	/**
@@ -152,28 +135,40 @@ class MinifyHelper extends ASingleton
 			}
 		}
 		// Minify the JS Files
-		$myNewList[] = $this->_minifyJS($parseList);
+		$myNewList[] = '/assets/js/' . $this->_minify($parseList, self::JS_TYPE);
 		
 		// return the group data back
 		return $myNewList;
 	}
 	
 	/**
-	 * Minify and concatenate a group of js
+	 * Minify JS or CSS Data.
 	 * 
-	 * @param array $aFileList List of JS file to group and minify
+	 * @param array  $aFileList List of files to minify.
+	 * @param string $aType     Type of files to minify.
 	 * 
 	 * @return string
 	 */
-	private function _minifyJS($aFileList)
+	private function _minify($aFileList, $aType)
 	{
-		$myFileData = $this->_concatenateFiles($aFileList, 'js');
+		$myFileData = $this->_concatenateFiles($aFileList, $aType);
 		// minify file content
-		$myFileData = \JSmin::minify($myFileData);
+		switch ($aType) {
+			case(self::CSS_TYPE):
+				// Minify CSS
+				$cssMin = new \CSSmin();
+				$myFileData = $cssMin->run($myFileData);
+				break;
+				
+			case(self::JS_TYPE):
+				// Minify JS
+				$myFileData = \JSmin::minify($myFileData);
+				break;
+		}
 		// save file with proper name and hash
-		$myFname = md5($myFileData) . '.js';
-		file_put_contents(PUBLIC_ROOT . 'js' . DS . $myFname, $myFileData);
-		// return filename
+		$myFname = md5($myFileData);
+		$myDir = App::mkCacheDir($aType);
+		App::writeCacheFile($aType . DS . $myFname, $myFileData);
 		return $myFname;
 	}
 	
@@ -189,7 +184,15 @@ class MinifyHelper extends ASingleton
 	{
 		$myReturn = '';
 		foreach ($aFiles as $data) {
-			$myReturn .= file_get_contents(PUBLIC_ROOT . $aBasePath . DS . $data) . "\n";
+			$tmpFilePath =  PUBLIC_ROOT . $aBasePath . DS . $data;
+			// check if it's a .less file
+			$myContent = file_get_contents($tmpFilePath);
+			
+			if (substr($tmpFilePath, -5) == '.less') {
+				$lessProc = new \lessc();
+				$myContent = $lessProc->compile($myContent);
+			}
+			$myReturn .= $myContent . "\n";
 		}
 		return $myReturn;
 	}

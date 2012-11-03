@@ -1,0 +1,11 @@
+#header {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+#header a {
+  color: #3879BD;
+}
+#header a:hover {
+  color: #000;
+}

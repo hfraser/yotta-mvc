@@ -79,7 +79,7 @@ define('DATA_DIR', __DIR__ . DS . 'data' . DS);
  *
  * @var string
  */
-define('CM_CACHE', __DIR__ . DS . 'cache' . DS);
+define('CM_CACHE', DATA_DIR . 'cache' . DS);
 
 /**
  * Include Autoload

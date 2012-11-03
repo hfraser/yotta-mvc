@@ -14,6 +14,9 @@
  */
 namespace core;
 use core\Patterns\ASingleton;
+use core\Exceptions\CMPathNotWritable;
+
+
 /**
  * Base App.
  *
@@ -150,9 +153,8 @@ class App extends ASingleton{
 			if (isset(self::$config->routing->$myRoute)) {
 				$myType = self::$config->routing->$myRoute->type;
 				$myAction = $myRoute;
-			} else {//if ($myType != self::CM_PAGES) {
-				$myType = self::CM_PAGES;
-				$myAction = '404';
+			} else {
+				self::throw404();
 			}
 		}
 		
@@ -163,8 +165,7 @@ class App extends ASingleton{
 		} elseif ($myType == self::CM_SERVICES) {
 			return 'services\\' . self::$config->routing->$myAction->link;
 		} else {
-			header("HTTP/1.0 404 Not Found");
-			return $myAction;
+			self::throw404();
 		}
 	}
 
@@ -202,5 +203,48 @@ class App extends ASingleton{
 		bindtextdomain('messages', LOCALES_DIR);
 		bind_textdomain_codeset('messages', 'UTF-8');
 		textdomain('messages');
+	}
+	
+	/**
+	 * Throw 404 page
+	 * 
+	 * @return void
+	 */
+	public static function throw404()
+	{
+		header("HTTP/1.0 404 Not Found");
+		PageParser::getContent('404');
+		exit();
+	}
+	
+	/**
+	 * Make a cache directory.
+	 *
+	 * @param string $aDirName Name of the directory.
+	 *
+	 * @throws core\Exceptions\CMPathNotWritable
+	 * @return string
+	 */
+	public static function mkCacheDir($aDirName)
+	{
+		$myDirName = CM_CACHE . $aDirName;
+		if (!is_dir(CM_CACHE . $aDirName)) {
+			if(!@mkdir($myDirName , '0744')){
+				throw(new CMPathNotWritable($myDirName));
+			}
+		}
+		return $myDirName;
+	}
+	
+	/**
+	 * Write file content to a specific cache directory.
+	 * @param unknown_type $aFilePath
+	 * @param unknown_type $aContent
+	 */
+	public static function writeCacheFile($aFilePath, $aContent)
+	{
+		if(file_put_contents(CM_CACHE . $aFilePath, $aContent) === false) {
+			throw(new CMPathNotWritable(CM_CACHE . $myPath . DS . $myFname, $myFileData));
+		}
 	}
 }

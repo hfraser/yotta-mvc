@@ -36,6 +36,7 @@ class HtmlHelper
 	 * @var Url
 	 */
 	protected $_request;
+	
 	/**
 	 * Styles config
 	 *
@@ -52,6 +53,7 @@ class HtmlHelper
 	{
 		$this->_request = App::getRequest();
 	}
+	
 	/**
 	 * Output all CSS files.
 	 *
@@ -134,14 +136,14 @@ class HtmlHelper
 	{
 		if (!isset(self::$styles)) {
 			if(App::$config->minify === true) {
-				if (!file_exists(CM_CACHE . 'styles.min.json') || App::$config->DEBUG === true) {
+				if (!file_exists(CM_CACHE . 'styles.min.json') || App::$config->DEBUG === true || !is_file(CM_CACHE . 'styles.min.json')) {
 					// minify CSS and JS
 					$myCssHelper = new MinifyHelper();
-					$myCssHelper->minify(CONFIG_DIR . 'styles.json');
+					$myCssHelper->minifyStyles(CONFIG_DIR . 'styles.json');
 				}
 				self::$styles = json_decode(file_get_contents(CM_CACHE . 'styles.min.json'));
 			} else {
-				self::$styles = json_decode(file_get_contents(CM_CACHE . 'styles.min.json'));
+				self::$styles = json_decode(file_get_contents(CONFIG_DIR . 'styles.json'));
 			}
 		}
 		return self::$styles;
@@ -158,6 +160,8 @@ class HtmlHelper
 	{
 		if (strpos($aPath, "http://") === 0) {
 			$myPath = $aPath;
+		} elseif(App::$config->minify === true) {
+				$myPath = $aPath;
 		} else {
 			$myPath = $this->_request->basepath . 'js/' . $aPath;
 		}
@@ -176,9 +180,31 @@ class HtmlHelper
 	{
 		if (strpos($aCSS->path, "http://") === 0) {
 			$myPath = $aCSS->path;
+		} elseif(App::$config->minify === true) {
+			$myPath = $aCSS->path;
 		} else {
 			$myPath = $this->_request->basepath . 'css/' . $aCSS->path;
 		}
+		// check if we got a .less file
+		if(substr($myPath, -5) == '.less') {
+			// Set proper path to get css from cache.
+			$myTmpName = substr($aCSS->path, 0, -5)  . '_css';
+			$myPath = '/assets/css/' . $myTmpName;
+			$myFilePath = PUBLIC_ROOT . 'css' . DS . $aCSS->path;
+			
+			// set new save path for compiled css
+			$myNewFilePath = 'css/' . $myTmpName;
+			
+			// compile .less
+			$myContent = file_get_contents($myFilePath);
+			$lessProc = new \lessc();
+			$myContent = $lessProc->compile($myContent);
+			
+			// save content file
+			App::mkCacheDir('css');
+			App::writeCacheFile($myNewFilePath, $myContent);
+		}
+		
 		echo('<link rel="stylesheet" href="' . $myPath . '" media="' . $aCSS->media . "\" />\n");
 	}
 	

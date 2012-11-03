@@ -8,6 +8,10 @@
 			"type":"page",
 			"link":"404.php"
 			},
+		"assets":{
+			"type":"service",
+			"link":"Assets"
+			},
 		"suggest":{
 			"type":"service",
 			"link":"SuggestionBox"

@@ -46,6 +46,7 @@ abstract class AService {
 	 */
 	public function __construct($aAction=null)
 	{
+		$this->_request = App::getRequest();
 		$this->helper = new HtmlHelper();
 		$this->call($aAction);
 	}
@@ -60,14 +61,13 @@ abstract class AService {
 	 * 
 	 * @return mixed
 	 */
-	public function call($aAction, $params = null)
+	public function call($aAction)
 	{
 		if (is_null($aAction)) {
 			$aAction = (isset($this->_request->path[0]))? '_' . $this->_request->path[0] . 'Action': '_indexAction';
 		}
-
 		if (method_exists($this, $aAction)) {
-			return $this->$aAction($params);
+			return $this->$aAction();
 		}
 		$this->_indexAction();
 	}
