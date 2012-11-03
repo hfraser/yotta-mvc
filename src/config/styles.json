@@ -2,7 +2,7 @@
 	"css":{
 		"main":[
 			{
-				"path":"main.css",
+				"path":"main.less",
 				"media":"screen"
 			},
 			{

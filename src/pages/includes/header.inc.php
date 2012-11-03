@@ -6,3 +6,4 @@
 <?php $this->helper->getAllCSS(); ?>
 </head>
 <body class="<?php echo($this->_request->currentAction . ' ' . $this->_request->lang); ?>">
+<div id="header"><h1><?php echo _("C-Mantix Ultralight Demo Page"); ?></h1></div>

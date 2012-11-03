@@ -36,6 +36,7 @@ class HtmlHelper
 	 * @var Url
 	 */
 	protected $_request;
+	
 	/**
 	 * Styles config
 	 *
@@ -45,6 +46,14 @@ class HtmlHelper
 	 */
 	public static $styles;
 
+	/**
+	 * Class Constructor
+	 */
+	public function __construct()
+	{
+		$this->_request = App::getRequest();
+	}
+	
 	/**
 	 * Output all CSS files.
 	 *
@@ -74,11 +83,6 @@ class HtmlHelper
 	{
 		if (isset(self::_loadStyles()->css->$aSection)) {
 			$myCSS = self::_loadStyles()->css->$aSection;
-			// Get the minified CSS.
-			if(App::$config->minify === true) {
-				$myCSS = $this->_minifyCSS($myCSS);
-			}
-				
 			// output specified CSS files
 			foreach ($myCSS as $value) {
 				$this->_outputCssTag($value);
@@ -113,11 +117,6 @@ class HtmlHelper
 	{
 		if (isset(self::_loadStyles()->js->$aSectionName)) {
 			$myJS = self::_loadStyles()->js->$aSectionName;
-			// output the minified JS and compressed.
-			if(App::$config->minify === true) {
-				$myJS = $this->_minifyJS($myJS);
-			}
-			
 			// output specified JS files not activated just output the data
 			foreach ($myJS as $value) {
 				$this->_outputJsTag($value);
@@ -136,7 +135,16 @@ class HtmlHelper
 	protected function _loadStyles()
 	{
 		if (!isset(self::$styles)) {
-			self::$styles = json_decode(file_get_contents(CONFIG_DIR . 'styles.json'));
+			if(App::$config->minify === true) {
+				if (!file_exists(CM_CACHE . 'styles.min.json') || App::$config->DEBUG === true || !is_file(CM_CACHE . 'styles.min.json')) {
+					// minify CSS and JS
+					$myCssHelper = new MinifyHelper();
+					$myCssHelper->minifyStyles(CONFIG_DIR . 'styles.json');
+				}
+				self::$styles = json_decode(file_get_contents(CM_CACHE . 'styles.min.json'));
+			} else {
+				self::$styles = json_decode(file_get_contents(CONFIG_DIR . 'styles.json'));
+			}
 		}
 		return self::$styles;
 	}
@@ -152,6 +160,8 @@ class HtmlHelper
 	{
 		if (strpos($aPath, "http://") === 0) {
 			$myPath = $aPath;
+		} elseif(App::$config->minify === true) {
+				$myPath = $aPath;
 		} else {
 			$myPath = $this->_request->basepath . 'js/' . $aPath;
 		}
@@ -170,39 +180,34 @@ class HtmlHelper
 	{
 		if (strpos($aCSS->path, "http://") === 0) {
 			$myPath = $aCSS->path;
+		} elseif(App::$config->minify === true) {
+			$myPath = $aCSS->path;
 		} else {
 			$myPath = $this->_request->basepath . 'css/' . $aCSS->path;
 		}
+		// check if we got a .less file
+		if(substr($myPath, -5) == '.less') {
+			// Set proper path to get css from cache.
+			$myTmpName = substr($aCSS->path, 0, -5)  . '_css';
+			$myPath = '/assets/css/' . $myTmpName;
+			$myFilePath = PUBLIC_ROOT . 'css' . DS . $aCSS->path;
+			
+			// set new save path for compiled css
+			$myNewFilePath = 'css/' . $myTmpName;
+			
+			// compile .less
+			$myContent = file_get_contents($myFilePath);
+			$lessProc = new \lessc();
+			$myContent = $lessProc->compile($myContent);
+			
+			// save content file
+			App::mkCacheDir('css');
+			App::writeCacheFile($myNewFilePath, $myContent);
+		}
+		
 		echo('<link rel="stylesheet" href="' . $myPath . '" media="' . $aCSS->media . "\" />\n");
 	}
 	
-	/**
-	 * Hook for JS minification
-	 * 
-	 * @todo implement JS M|inification
-	 * 
-	 * @param \stdClass $aJsList List of javascript to minify
-	 * 
-	 * @return \stdClass
-	 */
-	private function _minifyJS($aJsList)
-	{
-		return $aJsList;
-	}
-	
-	/**
-	 * Hook for CSS minification
-	 * 
-	 * @todo implement CSS M|inification
-	 * 
-	 * @param \stdClass $aCssList List of CSS to minify
-	 * 
-	 * @return \stdClass
-	 */
-	private function _minifyCSS($aCssList)
-	{
-		return $aCssList;
-	}
 	
 	/**
 	 * Get an image path relative to the public/images directory

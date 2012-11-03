@@ -1,5 +1,7 @@
 {
 	"DEBUG":false,
+	"minify": true,
+	"basepath": "/",
 	"DB":{
 		"type":"sqlite",
 		"name":"",
