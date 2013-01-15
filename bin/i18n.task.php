@@ -1,8 +1,6 @@
 <?php
 /**
  * I18N String exctraction task.
-
- * @todo Add documentation and tutorial on how to create new tasks
  *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
