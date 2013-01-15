@@ -2,8 +2,6 @@
 /**
  * Base App.
  *
- * @todo Add documentation and tutorial on how to create new applications
- *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
  * @copyright  2012 Hans-Frederic Fraser
