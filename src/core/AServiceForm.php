@@ -2,6 +2,8 @@
 /**
  * Base abstract form class.
  *
+ * @todo Add documentation and tutorial on how to create new forms
+ *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
  * @copyright  2012 Hans-Frederic Fraser
@@ -260,7 +262,35 @@ abstract class AServiceForm extends AService {
 	 */
 	protected function _getData($aField)
 	{
-		return (isset($this->_formData[$aField]))? htmlspecialchars($this->_formData[$aField]) : '';
+		$value = null;
+
+		if(strpos($aField, "[") !== false && strpos($aField, "]") !== false) {
+			$matches = preg_split('@[\]\[]|\[|\]@i', $aField, -1, PREG_SPLIT_NO_EMPTY);
+
+			foreach($matches as $idx => $arrayKey) {
+
+				if(is_null($value)) {
+					$value = $this->_formData;
+				}
+
+				if(!isset($value[$arrayKey])) {
+					return '';
+				}
+				if(!is_array($value[$arrayKey]) && $idx < count($matches)-1) {
+					return '';
+				}
+				$value = $value[$arrayKey];
+			}
+			return $value;
+		}
+		if(!isset($this->_formData[$aField])) {
+			return '';
+		}
+		if(is_array($this->_formData[$aField])) {
+			return htmlspecialchars(implode(',', $this->_formData[$aField]));
+		}
+		$value = (isset($this->_formData[$aField]))? htmlspecialchars($this->_formData[$aField]) : '';
+		return $value;
 	}
 
 	/**
