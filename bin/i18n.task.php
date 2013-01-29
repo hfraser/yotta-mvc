@@ -86,6 +86,11 @@ class i18n extends ATask
 		unlink('new.po');
 	}
 	
+	/**
+	 * Compile the .mo in .po files for all locales.
+	 * 
+	 * @return void
+	 */
 	protected function _compile()
 	{
 		echocs("Compiling Locales\n", 'blue');

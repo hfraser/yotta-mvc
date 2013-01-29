@@ -44,7 +44,7 @@ abstract class AService {
 	 *
 	 * @param string $aAction The action we want to call this defaults to index if no action is set.
 	 */
-	public function __construct($aAction=null)
+	public function __construct($aAction = null)
 	{
 		$this->_request = App::getRequest();
 		$this->helper = new HtmlHelper();
@@ -79,7 +79,7 @@ abstract class AService {
 	 * 
 	 * @return self
 	 */
-	public final static function getIndex($aAction='index')
+	public final static function getIndex($aAction = 'index')
 	{
 		return new static($aAction);
 	}

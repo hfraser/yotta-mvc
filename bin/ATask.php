@@ -2,8 +2,6 @@
 /**
  * Base task abstact class.
  *
- * @todo Add documentation and tutorial on how to create new tasks.
- *
  * @version   Release: 1.0
  * @author    Hans-Frederic Fraser <hffraser@gmail.com>
  * @copyright 2012 Hans-Frederic Fraser

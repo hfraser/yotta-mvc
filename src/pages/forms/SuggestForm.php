@@ -1,4 +1,5 @@
-<form id="suggestForm" method="post" action="<?php echo $this->_request->basepath . $this->_request->lang . "/suggest/submit" ?>">
+<form id="suggestForm" method="post" 
+	action="<?php echo $this->_request->basepath . $this->_request->lang . "/suggest/submit" ?>">
 	<fieldset>
 		<legend><?php echo _("Your comments and information"); ?></legend>
 		<div class="elgroup">

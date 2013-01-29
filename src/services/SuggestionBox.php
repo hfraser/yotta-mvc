@@ -18,7 +18,6 @@ use core\AServiceForm;
  *
  * This class is an example of a form service in action.
  *
- *
  * @version  Release: 1.0
  * @author   Hans-Frederic Fraser <hffraser@gmail.com>
  * @category Form

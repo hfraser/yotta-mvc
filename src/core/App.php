@@ -204,7 +204,7 @@ class App extends ASingleton{
 	}
 	
 	/**
-	 * Throw 404 page
+	 * Throw 404 page from anywhere.
 	 * 
 	 * @return void
 	 */
@@ -220,14 +220,16 @@ class App extends ASingleton{
 	 *
 	 * @param string $aDirName Name of the directory.
 	 *
-	 * @throws core\Exceptions\CMPathNotWritable
+	 * @throws core\Exceptions\CMPathNotWritable This error is thrown in case the
+	 *                                           path that is needed to write the
+	 *                                           cache is not writable.
 	 * @return string
 	 */
 	public static function mkCacheDir($aDirName)
 	{
 		$myDirName = CM_CACHE . $aDirName;
 		if (!is_dir(CM_CACHE . $aDirName)) {
-			if(!@mkdir($myDirName , '0744')){
+			if (!@mkdir($myDirName , '0744')) {
 				throw(new CMPathNotWritable($myDirName));
 			}
 		}
@@ -236,13 +238,19 @@ class App extends ASingleton{
 	
 	/**
 	 * Write file content to a specific cache directory.
-	 * @param unknown_type $aFilePath
-	 * @param unknown_type $aContent
+	 *
+	 * @param string $aFilePath File path to write.
+	 * @param string $aContent  File content.
+	 *
+	 * @throws core\Exceptions\CMPathNotWritable This error is thrown in case the
+	 *                                           path that is needed to write the
+	 *                                           cache is not writable.
+	 * @return void
 	 */
 	public static function writeCacheFile($aFilePath, $aContent)
 	{
-		if(file_put_contents(CM_CACHE . $aFilePath, $aContent) === false) {
-			throw(new CMPathNotWritable(CM_CACHE . $myPath . DS . $myFname, $myFileData));
+		if (file_put_contents(CM_CACHE . $aFilePath, $aContent) === false) {
+			throw(new CMPathNotWritable(CM_CACHE . $aFilePath, $aContent));
 		}
 	}
 }
