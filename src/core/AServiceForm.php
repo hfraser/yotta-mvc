@@ -2,6 +2,8 @@
 /**
  * Base abstract form class.
  *
+ * @todo Add documentation and tutorial on how to create new forms
+ *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
  * @copyright  2012 Hans-Frederic Fraser
@@ -87,7 +89,7 @@ abstract class AServiceForm extends AService {
 
 	/**
 	 * Class constructor.
-	*/
+	 */
 	public function __construct()
 	{
 		$this->_request = App::getRequest();
@@ -114,7 +116,7 @@ abstract class AServiceForm extends AService {
 	 * @param \RedBean_OODBBean $aData Form data to be saved.
 	 *
 	 * @return int ID of the currently saved form.
-	*/
+	 */
 	protected function _saveData(\RedBean_OODBBean $aData)
 	{
 		return \R::store($aData);
@@ -261,7 +263,6 @@ abstract class AServiceForm extends AService {
 	protected function _getData($aField)
 	{
 		$myValue = null;
-
 		if (strpos($aField, "[") !== false && strpos($aField, "]") !== false) {
 			$myMatches = preg_split('@[\]\[]|\[|\]@i', $aField, -1, PREG_SPLIT_NO_EMPTY);
 			foreach ($myMatches as $idx => $arrayKey) {
