@@ -225,7 +225,7 @@ class Url extends ASingleton
 	}
 	
 	/**
-	 * Get the full Root URL (explecit http:// ....)
+	 * Get the full Root URL (explecit http:// ....).
 	 * 
 	 * This will also include the base path of the application.
 	 * 

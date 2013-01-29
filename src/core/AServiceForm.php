@@ -262,7 +262,31 @@ abstract class AServiceForm extends AService {
 	 */
 	protected function _getData($aField)
 	{
-		return (isset($this->_formData[$aField]))? htmlspecialchars($this->_formData[$aField]) : '';
+		$myValue = null;
+		if (strpos($aField, "[") !== false && strpos($aField, "]") !== false) {
+			$myMatches = preg_split('@[\]\[]|\[|\]@i', $aField, -1, PREG_SPLIT_NO_EMPTY);
+			foreach ($myMatches as $idx => $arrayKey) {
+				if (is_null($myValue)) {
+					$myValue = $this->_formData;
+				}
+				if (!isset($myValue[$arrayKey])) {
+					return '';
+				}
+				if (!is_array($myValue[$arrayKey]) && $idx < count($myMatches) - 1) {
+					return '';
+				}
+				$myValue = $myValue[$arrayKey];
+			}
+			return $myValue;
+		}
+		if (!isset($this->_formData[$aField])) {
+			return '';
+		}
+		if (is_array($this->_formData[$aField])) {
+			return htmlspecialchars(implode(',', $this->_formData[$aField]));
+		}
+		$myValue = (isset($this->_formData[$aField]))? htmlspecialchars($this->_formData[$aField]) : '';
+		return $myValue;
 	}
 
 	/**

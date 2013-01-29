@@ -47,7 +47,7 @@ class HtmlHelper
 	public static $styles;
 
 	/**
-	 * Class Constructor
+	 * Class Constructor.
 	 */
 	public function __construct()
 	{
@@ -66,7 +66,7 @@ class HtmlHelper
 	 */
 	public function getAllCSS()
 	{
-		foreach (self::_loadStyles()->css as $key=>$value) {
+		foreach (static::_loadStyles()->css as $key => $value) {
 			$this->getSectionCSS($key);
 		}
 	}
@@ -81,8 +81,8 @@ class HtmlHelper
 	 */
 	public function getSectionCSS($aSection)
 	{
-		if (isset(self::_loadStyles()->css->$aSection)) {
-			$myCSS = self::_loadStyles()->css->$aSection;
+		if (isset(static::_loadStyles()->css->$aSection)) {
+			$myCSS = static::_loadStyles()->css->$aSection;
 			// output specified CSS files
 			foreach ($myCSS as $value) {
 				$this->_outputCssTag($value);
@@ -101,7 +101,7 @@ class HtmlHelper
 	 */
 	public function getAllJS()
 	{
-		foreach (self::_loadStyles()->js as $key=>$value) {
+		foreach (static::_loadStyles()->js as $key => $value) {
 			$this->getSectionJS($key);
 		}
 	}
@@ -115,8 +115,8 @@ class HtmlHelper
 	 */
 	public function getSectionJS($aSectionName)
 	{
-		if (isset(self::_loadStyles()->js->$aSectionName)) {
-			$myJS = self::_loadStyles()->js->$aSectionName;
+		if (isset(static::_loadStyles()->js->$aSectionName)) {
+			$myJS = static::_loadStyles()->js->$aSectionName;
 			// output specified JS files not activated just output the data
 			foreach ($myJS as $value) {
 				$this->_outputJsTag($value);
@@ -134,19 +134,21 @@ class HtmlHelper
 	 */
 	protected function _loadStyles()
 	{
-		if (!isset(self::$styles)) {
-			if(App::$config->minify === true) {
-				if (!file_exists(CM_CACHE . 'styles.min.json') || App::$config->DEBUG === true || !is_file(CM_CACHE . 'styles.min.json')) {
+		if (!isset(static::$styles)) {
+			if (App::$config->minify === true) {
+				if (!file_exists(CM_CACHE . 'styles.min.json') 
+						|| App::$config->DEBUG === true 
+						|| !is_file(CM_CACHE . 'styles.min.json')) {
 					// minify CSS and JS
 					$myCssHelper = new MinifyHelper();
 					$myCssHelper->minifyStyles(CONFIG_DIR . 'styles.json');
 				}
-				self::$styles = json_decode(file_get_contents(CM_CACHE . 'styles.min.json'));
+				static::$styles = json_decode(file_get_contents(CM_CACHE . 'styles.min.json'));
 			} else {
-				self::$styles = json_decode(file_get_contents(CONFIG_DIR . 'styles.json'));
+				static::$styles = json_decode(file_get_contents(CONFIG_DIR . 'styles.json'));
 			}
 		}
-		return self::$styles;
+		return static::$styles;
 	}
 
 	/**
@@ -160,7 +162,7 @@ class HtmlHelper
 	{
 		if (strpos($aPath, "http://") === 0) {
 			$myPath = $aPath;
-		} elseif(App::$config->minify === true) {
+		} elseif (App::$config->minify === true) {
 				$myPath = $aPath;
 		} else {
 			$myPath = $this->_request->basepath . 'js/' . $aPath;
@@ -180,13 +182,13 @@ class HtmlHelper
 	{
 		if (strpos($aCSS->path, "http://") === 0) {
 			$myPath = $aCSS->path;
-		} elseif(App::$config->minify === true) {
+		} elseif (App::$config->minify === true) {
 			$myPath = $aCSS->path;
 		} else {
 			$myPath = $this->_request->basepath . 'css/' . $aCSS->path;
 		}
 		// check if we got a .less file
-		if(substr($myPath, -5) == '.less') {
+		if (substr($myPath, -5) == '.less') {
 			// Set proper path to get css from cache.
 			$myTmpName = substr($aCSS->path, 0, -5)  . '_css';
 			$myPath = '/assets/css/' . $myTmpName;
@@ -210,9 +212,9 @@ class HtmlHelper
 	
 	
 	/**
-	 * Get an image path relative to the public/images directory
+	 * Get an image path relative to the public/images directory.
 	 * 
-	 * @param string $aImg Image name and path
+	 * @param string $aImg Image name and path.
 	 * 
 	 * @return string
 	 */

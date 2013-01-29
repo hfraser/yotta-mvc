@@ -6,8 +6,9 @@
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
  * @copyright  2012 Hans-Frederic Fraser
  * @license    http://www.gnu.org/licenses/gpl-3.0-standalone.html gpl-3.0
- * @category   Core
+ * @category   Helpers
  * @package    Core
+ * @subpackage Helpers
  * @filesource
  */
 namespace core\Helpers;
@@ -26,8 +27,6 @@ use core\Patterns\ASingleton;
  * @package    Core
  * @subpackage Helpers
  */
-
-
 class MinifyHelper extends ASingleton 
 {
 	
@@ -35,15 +34,15 @@ class MinifyHelper extends ASingleton
 	const JS_TYPE = 'js';
 	
 	/**
-	 * Class constructor
+	 * Class constructor.
 	 */
 	public function __construct()
 	{}
 	
 	/**
-	 * Minify all files in a Styles config file (config/styles.json)
+	 * Minify all files in a Styles config file (config/styles.json).
 	 * 
-	 * @param string $aStylesFile Path to the styles.json config file
+	 * @param string $aStylesFile Path to the styles.json config file.
 	 * 
 	 * @return void
 	 */
@@ -52,12 +51,12 @@ class MinifyHelper extends ASingleton
 		// load styles config
 		$myStyles = json_decode(file_get_contents($aStylesFile));
 		// Parse CSS section
-		foreach ($myStyles->css as $key=>$value) {
+		foreach ($myStyles->css as $key => $value) {
 			$myStyles->css->$key = $this->_parseCSSGroup($value);
 		}
 		
 		// parse JS section
-		foreach ($myStyles->js as $key=>$value) {
+		foreach ($myStyles->js as $key => $value) {
 			$myStyles->js->$key = $this->_parseJSGroup($value);
 		}
 		// Save new file data
@@ -66,11 +65,11 @@ class MinifyHelper extends ASingleton
 	}
 
 	/**
-	 * Minify a css group
+	 * Minify a css group.
 	 * 
 	 * Concatenante and minify a full CSS group keeping seperate the medias
 	 *  
-	 * @param array|\stdClass $aCssFiles List of css files t group and minify
+	 * @param array|\stdClass $aCssFiles List of css files t group and minify.
 	 * 
 	 * @return array
 	 */
@@ -94,14 +93,14 @@ class MinifyHelper extends ASingleton
 		}
 		
 		
-		// now that we have our media based parse list we can begin to create the proper minification files.
+		// now that we have our media based parse list 
+		// we can begin to create the proper minification files.
 		foreach ($parseList as $key => $value) {
 			$parseList[$key] = '/assets/css/' . $this->_minify($value, self::CSS_TYPE);
 		}
 		
 		// bring it all back together
-		foreach ($parseList as $key => $value)
-		{
+		foreach ($parseList as $key => $value) {
 			$myNewList[] = array(
 					"media" => $key,
 					"path" => $value
@@ -111,11 +110,11 @@ class MinifyHelper extends ASingleton
 	}
 	
 	/**
-	 * Minify a JS group
+	 * Minify a JS group.
 	 * 
 	 * Concatenante and minify a full JS group keeping seperate the medias
 	 *  
-	 * @param array|\stdClass $aJSFiles List of JS files to group and minify
+	 * @param array|\stdClass $aJSFiles List of JS files to group and minify.
 	 * 
 	 * @return array
 	 */
@@ -123,7 +122,6 @@ class MinifyHelper extends ASingleton
 	{
 		$parseList = array();
 		$myNewList = array();
-	
 		// iterate through the provided files
 		foreach ($aJSFiles as $data) {
 			if (strpos($data, "http://" === 0) && strpos($data, "https://" === 0)) {
@@ -136,7 +134,6 @@ class MinifyHelper extends ASingleton
 		}
 		// Minify the JS Files
 		$myNewList[] = '/assets/js/' . $this->_minify($parseList, self::JS_TYPE);
-		
 		// return the group data back
 		return $myNewList;
 	}
@@ -149,7 +146,7 @@ class MinifyHelper extends ASingleton
 	 * 
 	 * @return string
 	 */
-	private function _minify($aFileList, $aType)
+	private function _minify(array $aFileList, $aType)
 	{
 		$myFileData = $this->_concatenateFiles($aFileList, $aType);
 		// minify file content
@@ -173,18 +170,18 @@ class MinifyHelper extends ASingleton
 	}
 	
 	/**
-	 * Concatenate a group of files
+	 * Concatenate a group of files.
 	 * 
-	 * @param array  $aFiles    List of files to concatenate
-	 * @param string $aBasePath Path relative to the public folder
+	 * @param array  $aFiles    List of files to concatenate.
+	 * @param string $aBasePath Path relative to the public folder.
 	 * 
 	 * @return string
 	 */
-	private function _concatenateFiles($aFiles, $aBasePath)
+	private function _concatenateFiles(array $aFiles, $aBasePath)
 	{
 		$myReturn = '';
 		foreach ($aFiles as $data) {
-			$tmpFilePath =  PUBLIC_ROOT . $aBasePath . DS . $data;
+			$tmpFilePath = PUBLIC_ROOT . $aBasePath . DS . $data;
 			// check if it's a .less file
 			$myContent = file_get_contents($tmpFilePath);
 			

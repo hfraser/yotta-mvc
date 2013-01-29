@@ -12,7 +12,7 @@
 	<tstamp>
 		<format property="DATE" pattern="%c" />
 	</tstamp>
-	
+
 	<!--
 	set envconf variable in order to match the evironment we are building in.
 	This value will default to "dev" if no environment are set
@@ -57,7 +57,7 @@
 				</if>
 				<property name="env.BUILD_NUMBER" value="DEV-${DSTAMP}-${TSTAMP}" override="yes" />
 				<!-- unquote the following line if you are running in an svn environement -->
-				<!-- <svnlastrevision svnpath="${envconf.svnpath}" workingcopy="${project.basedir}" propertyname="env.SVN_REVISION" /> -->
+				<!-- <svnlastrevision svnpath="${envconf.svnpath}" workingcopy="${project.basedir}" propertyname="env.SVN_REVISION" /> -->				
 			</else>
 		</if>
 		<if>
@@ -70,7 +70,7 @@
 				<mkdir dir="${builddir}" />
 				<echo level="info" msg="    Creating ${logdir} !" />
 				<mkdir dir="${logdir}" />
-				<mkdir dir="${release.dir}/" />
+				<mkdir dir="${release.dir}/" />				
 			</then>
 		</if>
 		<property name="rlname" value="cmul_${env.BUILD_NUMBER}" />
@@ -131,8 +131,8 @@
 	<target name="version-create" description="Create a version description file. Should not be called unless main has been called">
 		<echo level="info" msg="    Create version.txt file ..." />
 		<echo file="${release.dir}/version.txt">job : ${env.JOB_NAME}
-build : ${env.BUILD_NUMBER}</echo>
-		<echo file="${release.dir}/version.txt">date : ${DATE}</echo>
+build : ${env.BUILD_NUMBER}
+date : ${DATE}</echo>
 		<!-- unquote the following line if you are running in an svn environement -->
 		<if>
 			<isset property="env.SVN_REVISION" />
@@ -147,16 +147,30 @@ build : ${env.BUILD_NUMBER}</echo>
 		<echo level="info" msg="Creating PHP Documentation" />
 		<echo level="info" msg="    Creating Build Dir / docs!" />
 		<mkdir dir="${docdir}" />
-		<phpdoc title="CM-Ultralight Code Documentation" quiet="true" destdir="${docdir}" sourcecode="yes" defaultcategoryname="CM-Ultralight" defaultpackagename="CM-Ultralight" output="HTML:frames:DOM/l0l33t">
+		<!-- unquote the following block for older phpdocumentor version -->
+		<!-- phpdoc title="CM-Ultralight Code Documentation" quiet="true" destdir="${docdir}" sourcecode="yes" defaultcategoryname="CM-Ultralight" defaultpackagename="CM-Ultralight" output="HTML:frames:DOM/l0l33t">
 			<fileset dir="${project.basedir}/">
 				<include name="**" />
 				<exclude name="src/pages/**" />
 				<exclude name="build/**" />
+				<exclude name="**/src/libs/cssmin/**" />
+				<exclude name="**/src/libs/jsmin/**" />
+				<exclude name="**/src/libs/lessphp/**" />
 			</fileset>
 			<projdocfileset dir=".">
 				<include name="README" />
 			</projdocfileset>
-		</phpdoc>
+		</phpdoc -->
+		<phpdoc2 title="C-mantix Ultralight Code Documentation" destdir="${docdir}" template="responsive">
+			<fileset dir="${project.basedir}/">
+				<include name="**" />
+				<exclude name="src/pages/**" />
+				<exclude name="build/**" />
+				<exclude name="**/src/libs/cssmin/**" />
+				<exclude name="**/src/libs/jsmin/**" />
+				<exclude name="**/src/libs/lessphp/**" />
+			</fileset>
+		</phpdoc2>
 	</target>
 
 	<!-- PHP copy/paste analysis -->
@@ -167,6 +181,9 @@ build : ${env.BUILD_NUMBER}</echo>
 				<include name="**/*.php" />
 				<exclude name="**/*.js" />
 				<exclude name="**/R.php" />
+				<exclude name="**/src/libs/cssmin/**" />
+				<exclude name="**/src/libs/jsmin/**" />
+				<exclude name="**/src/libs/lessphp/**" />
 				<exclude name="build/**" />
 			</fileset>
 			<formatter type="pmd" outfile="${builddir}/logs/cpd-pmd.xml" />
@@ -181,6 +198,9 @@ build : ${env.BUILD_NUMBER}</echo>
 			<fileset dir="${project.basedir}/">
 				<include name="**/*.php" />
 				<exclude name="**/R.php" />
+				<exclude name="**/src/libs/cssmin/**" />
+				<exclude name="**/src/libs/jsmin/**" />
+				<exclude name="**/src/libs/lessphp/**" />
 				<exclude name="build/**" />
 			</fileset>
 			<logger type="jdepend-xml" outfile="${logdir}/jdepend.xml" />
@@ -194,6 +214,9 @@ build : ${env.BUILD_NUMBER}</echo>
 			<fileset dir="${project.basedir}/">
 				<include name="**/*.php" />
 				<exclude name="**/R.php" />
+				<exclude name="**/src/libs/cssmin/**" />
+				<exclude name="**/src/libs/jsmin/**" />
+				<exclude name="**/src/libs/lessphp/**" />
 				<exclude name="build/**" />
 			</fileset>
 			<formatter type="xml" outfile="${logdir}/pmd.xml" />
@@ -202,19 +225,35 @@ build : ${env.BUILD_NUMBER}</echo>
 
 	<!-- PHP Checkstyle -->
 	<target name="checkstyle" depends="prepare" description="PHP Checkstyle">
+		<echo level="info" msg="    Creating tmp dir for checkstyle sniffer." />
+		<mkdir dir="${builddir}/tmp" />
+		<echo level="info" msg="    Checking out Cmantix sniffer" />
+		<gitclone 
+			repository="https://bitbucket.org/hfraser/cmantix-sniffer.git"
+		    targetPath="${builddir}/tmp/Cmantix" />
+		<!-- Cmantix -->
 		<echo level="info" msg="Checking style ..." />
-		<phpcodesniffer standard="Cmantix" showSniffs="true" showWarnings="true">
+		<phpcodesniffer 
+			standard="${builddir}/tmp/Cmantix" 
+			showSniffs="true" 
+			showWarnings="true">
 			<fileset dir="./">
 				<include name="**/*.php" />
 				<exclude name="**/R.php" />
 				<exclude name="**/src/pages/**.php" />
+				<exclude name="**/src/libs/cssmin/**" />
+				<exclude name="**/src/libs/jsmin/**" />
+				<exclude name="**/src/libs/lessphp/**" />
 				<exclude name="build/**" />
 			</fileset>
 			<formatter type="default" usefile="false" />
+			<formatter type="full" outfile="${logdir}/checkstyle.txt"/>
 			<formatter type="checkstyle" outfile="${logdir}/checkstyle.xml" />
 		</phpcodesniffer>
+		<echo level="info" msg="    Deleting Temporary directory." />
+		<delete dir="${builddir}/tmp" />
 	</target>
-	
+
 	<target name="validate-source" description="Validate all the current code">
 		<phingcall target="phpdoc" />
 		<phingcall target="checkstyle" />
