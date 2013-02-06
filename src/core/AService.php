@@ -67,9 +67,11 @@ abstract class AService {
 			$aAction = (isset($this->_request->path[0]))? '_' . $this->_request->path[0] . 'Action': '_indexAction';
 		}
 		if (method_exists($this, $aAction)) {
-			return $this->$aAction();
+			$this->_request->shiftPath();
+			
+			return $this->$aAction($this->_request->path);
 		}
-		$this->_indexAction();
+		$this->_indexAction($this->_request->path);
 	}
 
 	/**

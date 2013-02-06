@@ -43,7 +43,8 @@ class SuggestionBox extends AServiceForm
 			'values' => array(
 				'yourname' => array('string250', true),
 				'email' => array('email', true),
-				'suggestion' => array('string1000', true)
+				'suggestion' => array('string1000', true),
+				'image' => array('file', true, 'pictures/')
 			),
 			'messages' => array(
 				'default' => array (

@@ -82,6 +82,13 @@ define('DATA_DIR', __DIR__ . DS . 'data' . DS);
 define('CM_CACHE', DATA_DIR . 'cache' . DS);
 
 /**
+ * Cache directory
+ *
+ * @var string
+ */
+define('CM_UPLOAD_DIR', PUBLIC_ROOT . 'uploads' . DS);
+
+/**
  * Include Autoload
  */
 require 'core/Autoload.php';

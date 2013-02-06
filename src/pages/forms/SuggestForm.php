@@ -1,4 +1,4 @@
-<form id="suggestForm" method="post" 
+<form id="suggestForm" method="post" enctype="multipart/form-data"
 	action="<?php echo $this->_request->basepath . $this->_request->lang . "/suggest/submit" ?>">
 	<fieldset>
 		<legend><?php echo _("Your comments and information"); ?></legend>
@@ -25,6 +25,14 @@
 			placeholder="<?php echo _("What the hell do you want to suggest!"); ?>"><?php echo $this->_getData('suggestion') ?></textarea>
 			<?php if ($this->_getError('suggestion')) { ?>
 				<div class="error"><?php echo $this->_getError('suggestion'); ?></div>
+			<?php }?>
+		</div>
+		<div class="elgroup">
+		<label for="image"><?php echo _("Picture") ?></label>
+		<input type="file" name="image" class="float-right"
+			placeholder="<?php echo _("Your Picture"); ?>" value="<?php echo $this->_getData('image') ?>" />
+			<?php if ($this->_getError('email')) { ?>
+				<div class="error"><?php echo $this->_getError('image'); ?></div>
 			<?php }?>
 		</div>
 	</fieldset>
