@@ -1,4 +1,4 @@
-<html lang="<?php echo($this->_request->lang);?>">
+<html lang="<?php echo($this->getData('lang'));?>">
 <head>
 	<meta charset="utf-8" />
 	<title><?php echo _('404 Page'); ?></title>

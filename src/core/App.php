@@ -74,7 +74,7 @@ class App extends ASingleton{
 	 */
 	protected function __construct()
 	{
-		$this->loadConfig();
+		$this->_loadConfig();
 	}
 
 	/**
@@ -103,7 +103,7 @@ class App extends ASingleton{
 	 *
 	 * @return void
 	 */
-	public function loadConfig()
+	protected function _loadConfig()
 	{
 		self::$config = json_decode(file_get_contents(CONFIG_DIR . 'config.json'));
 		$myRoutes = json_decode(file_get_contents(CONFIG_DIR . 'routing.json'));
@@ -205,7 +205,7 @@ class App extends ASingleton{
 	
 	/**
 	 * Throw 404 page from anywhere.
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function throw404()
@@ -229,7 +229,7 @@ class App extends ASingleton{
 	{
 		$myDirName = CM_CACHE . $aDirName;
 		if (!is_dir(CM_CACHE . $aDirName)) {
-			if (!@mkdir($myDirName , '0744')) {
+			if (!@mkdir($myDirName , '0744', true)) {
 				throw(new CMPathNotWritable($myDirName));
 			}
 		}

@@ -36,15 +36,14 @@ class SuggestionBox extends AServiceForm
 		return (object)array(
 			'modelName' => 'suggestion',
 			'templates' => array(
-				self::INDEX_ACTION => ACTION_ROOT . 'forms/SuggestForm.php',
-				self::FAIL_ACTION => ACTION_ROOT . 'forms/SuggestForm.php',
-				self::SUCCESS_ACTION => ACTION_ROOT . 'forms/SuggestFormSuccess.php'
+				self::INDEX_ACTION => 'forms/SuggestForm.php',
+				self::FAIL_ACTION => 'forms/SuggestForm.php',
+				self::SUCCESS_ACTION => 'forms/SuggestFormSuccess.php'
 			),
 			'values' => array(
 				'yourname' => array('string250', true),
 				'email' => array('email', true),
 				'suggestion' => array('string1000', true),
-				'image' => array('file', true, 'pictures/')
 			),
 			'messages' => array(
 				'default' => array (

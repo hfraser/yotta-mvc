@@ -8,6 +8,7 @@
  * @license    http://www.gnu.org/licenses/gpl-3.0-standalone.html gpl-3.0
  * @category   Core
  * @package    Core
+ * @subpackage Helpers
  * @filesource
  */
 namespace core\Helpers;
@@ -32,7 +33,7 @@ class HtmlHelper
 	
 	/**
 	 * Short link to the URL object
-	 * 
+	 *
 	 * @var Url
 	 */
 	protected $_request;
@@ -136,8 +137,8 @@ class HtmlHelper
 	{
 		if (!isset(static::$styles)) {
 			if (App::$config->minify === true) {
-				if (!file_exists(CM_CACHE . 'styles.min.json') 
-						|| App::$config->DEBUG === true 
+				if (!file_exists(CM_CACHE . 'styles.min.json')
+						|| App::$config->DEBUG === true
 						|| !is_file(CM_CACHE . 'styles.min.json')) {
 					// minify CSS and JS
 					$myCssHelper = new MinifyHelper();
@@ -213,9 +214,9 @@ class HtmlHelper
 	
 	/**
 	 * Get an image path relative to the public/images directory.
-	 * 
+	 *
 	 * @param string $aImg Image name and path.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getImage($aImg)

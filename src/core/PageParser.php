@@ -28,27 +28,12 @@ class PageParser
 {
 
 	/**
-	 * Server request object
-	 * @var core\Url
-	 */
-	protected $_request;
-
-	/**
-	 * Html Helper class.
-	 *
-	 * @var HtmlHelper
-	 */
-	public $helper;
-
-	/**
 	 * Class Constructor.
 	 *
 	 * @param string $aRoute The route for wich we are loading the page.
 	 */
 	public function __construct($aRoute)
 	{
-		$this->_request = Url::getInstance();
-		$this->helper = new HtmlHelper();
 		$this->_loadPage($aRoute);
 	}
 
@@ -57,24 +42,20 @@ class PageParser
 	 *
 	 * @param string $aRoute The route for the page we want to load.
 	 *
-	 * @return boolean
+	 * @return void
 	 */
 	protected function _loadPage($aRoute)
 	{
-		if (is_null($aRoute)) {
-			throw(new BadMethodCallException('Missing Parameter'));
-		}
 		if (isset( App::$config->routing->$aRoute )) {
-			$myPath = ACTION_ROOT . App::$config->routing->$aRoute->link;
-			if (file_exists($myPath)) {
-				include($myPath);
-				return true;
-			}
-			throw (new BadMethodCallException("Page file does not exist {$myPath}"));
+			$myTemplate = App::$config->routing->$aRoute->link;
+			echo ViewFactory::getView()
+				->loadTemplate($myTemplate)
+				->render();
+		} else {
+			throw(new BadMethodCallException(
+				"ROUTE : {$aRoute} does not exists in the routing table"
+			));
 		}
-		throw(new BadMethodCallException(
-			"No inclusion possible ROUTE : {$aRoute} does not exists in the routing table"
-		));
 	}
 
 	/**

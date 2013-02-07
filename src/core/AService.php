@@ -33,13 +33,6 @@ abstract class AService {
 	protected $_request;
 
 	/**
-	 * Html Helper class.
-	 *
-	 * @var HtmlHelper
-	 */
-	public $helper;
-
-	/**
 	 * Class Constructor.
 	 *
 	 * @param string $aAction The action we want to call this defaults to index if no action is set.
@@ -47,7 +40,6 @@ abstract class AService {
 	public function __construct($aAction = null)
 	{
 		$this->_request = App::getRequest();
-		$this->helper = new HtmlHelper();
 		$this->call($aAction);
 	}
 
@@ -56,9 +48,9 @@ abstract class AService {
 	 *
 	 * This function will redistribute the proper calls to the appropriate
 	 * action in order to execute the desired operation.
-	 * 
+	 *
 	 * @param string $aAction The action we want to call this defaults to index if no action is set.
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function call($aAction)
@@ -78,7 +70,7 @@ abstract class AService {
 	 * Get indexAction values without having the object present.
 	 *
 	 * @param string $aAction The action we want to call this defaults to index if no action is set.
-	 * 
+	 *
 	 * @return self
 	 */
 	public final static function getIndex($aAction = 'index')
