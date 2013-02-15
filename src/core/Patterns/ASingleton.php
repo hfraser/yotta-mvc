@@ -27,6 +27,14 @@ namespace core\Patterns;
  */
 abstract class ASingleton
 {
+	
+	/**
+	 * For unit testing purposes.
+	 *
+	 * @var bool
+	 */
+	public static $test = false;
+	
 	/**
 	 * Class constructor.
 	 */
@@ -42,7 +50,7 @@ abstract class ASingleton
 	 */
 	public final function __clone()
 	{
-		throw new BadMethodCallException("Clone is not allowed");
+		throw new \BadMethodCallException("Clone is not allowed");
 	}
 
 	/**
@@ -52,12 +60,15 @@ abstract class ASingleton
 	 */
 	public final static function getInstance()
 	{
-		/**
-		 * Instance of self.
-		 *
-		 * @var self
-		 */
-		static $instance = null;
-		return $instance  ?: $instance  = new static;
+		if (!self::$test) {
+			/**
+			 * Instance of self.
+			 *
+			 * @var self
+			 */
+			static $instance = null;
+			return $instance  ?: $instance  = new static;
+		}
+		return $instance  = new static;
 	}
 }

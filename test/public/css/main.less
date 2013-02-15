@@ -1,0 +1,71 @@
+@color: #5F9EA0;
+@import url(http://fonts.googleapis.com/css?family=Inder);
+
+
+
+.rounded-corners (@radius: 5px) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -ms-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.tablecell () {
+	
+}
+body {
+	font-family: 'Inder', sans-serif;
+	background-color: @color;
+}
+
+#header {
+	color: #555;
+	background-color:#222;
+	padding: 10px;
+	.rounded-corners;
+}
+
+#footer {
+	.rounded-corners;
+	background-color:#222;
+	color: #555;
+	padding: 10px;
+	a {
+		text-decoration: none;
+		color: #555;
+		&:hover {
+			color: #aaa;
+		}
+	}
+}
+
+form {	
+	fieldset {
+		.rounded-corners;
+		display: table;
+		.elgroup {
+			display: table-row;
+		}
+		label {
+			width:120px;
+			display: table-cell;
+			text-align: right;
+			vertical-align:top;
+		}
+		
+		input,
+		textarea {
+			display: table-cell;
+			width:300px;
+		}
+		textarea {
+			height:200px;
+		}
+		.error {
+			.rounded-corners;
+			background-color: #f44;
+			padding: 5px;
+		}
+	}
+}

@@ -12,11 +12,11 @@
 * @filesource
 */
 namespace core\Helpers;
-use core\App;
-
+use core\Patterns\ASingleton;
+use core\Url;
 use core\Exceptions\CMFileUploadException;
 use core\Exceptions\CMFileUploadMissingException;
-use core\Patterns\ASingleton;
+use core\Exceptions\CMFileUploadExceptionInvalidFormat;
 
 /**
  * File upload helper.
@@ -52,9 +52,10 @@ class FileUploadHelper extends ASingleton
 	 */
 	public function handleFormUpload($aFileKey, array $aElConf)
 	{
-		if ($myFileData = App::getRequest()->files[$aFileKey]) {
+		if (isset(Url::getInstance()->files[$aFileKey])) {
+			$myFileData = Url::getInstance()->files[$aFileKey];
 			// check if we have more then one uploaded files
-			if (is_array($myFileData['name'])) {
+			if (is_array($myFileData['name']) && $aElConf[0] === 'filemultiple') {
 				$myValue = array();
 				// process multiple files
 				for ($i = 0; $i < count($myFileData['name']); $i++) {
@@ -64,14 +65,16 @@ class FileUploadHelper extends ASingleton
 					} else {
 						$fileType = $myFileData['type'][$i];
 						$fname = $myFileData['name'][$i];
-						$uploadPath = $aElConf[2][$i];
+						$uploadPath = $aElConf[2];
 						$tmpName = $myFileData['tmp_name'][$i];
 						$myValue[] = $this->validateAndMoveFile($fileType, $tmpName, $uploadPath, $fname);
 					}
 				}
 				return json_encode($myValue);
+			} elseif (is_array($myFileData['name']) && $aElConf[0] === 'file') {
+				throw(new CMFileUploadException('DO NOT UPLOAD MULTIPLE FILES'));
 			} else {
-				if ($myFileData['error'][$aFileKey]) {
+				if ($myFileData['error']) {
 					throw(new CMFileUploadException());
 				} else {
 					$fileType = $myFileData['type'];
@@ -87,8 +90,10 @@ class FileUploadHelper extends ASingleton
 			// Error no file
 			throw(new CMFileUploadMissingException());
 		}
+		// @codeCoverageIgnoreStart
 	}
-	
+	// @codeCoverageIgnoreEnd
+		
 	/**
 	 * Validate and move an uploaded file.
 	 *
@@ -107,20 +112,46 @@ class FileUploadHelper extends ASingleton
 			$mySavePath = CM_UPLOAD_DIR . $aUploadDirPath;
 			if (!is_dir($mySavePath)) {
 				// if folder does not exists create it
-				if (!@mkdir($mySavePath, 744, true)) {
+				// @codeCoverageIgnoreStart
+				if (!@mkdir($mySavePath, 0744, true)) {
 					throw(new CMPathNotWritable($mySavePath));
 				}
 			}
+			// @codeCoverageIgnoreEnd
 			// Check if the file allready exists
 			if (file_exists($mySavePath . $aFname)) {
 				// give a new name to the file
 				$aFname = uniqid() . $aFname;
 			}
 			// Move file to proper folder.
-			move_uploaded_file($aTmpName, $mySavePath . $aFname);
-			return 'uploads/' . $aUploadDirPath . $aFname;
+			if ($this->_moveUploadedFile($aTmpName, $mySavePath . $aFname)) {
+				return 'uploads/' . $aUploadDirPath . $aFname;
+			} else {
+				throw (new CMFileUploadException("move_uploaded_file({$aTmpName}, {$mySavePath}{$aFname})"));
+			}
 		} else {
+			throw (new CMFileUploadExceptionInvalidFormat($aFileType));
+		}
+	}
+	
+	/**
+	 * Make Uploads testable.
+	 *
+	 * @param string $aTmpName  Temporary file to move.
+	 * @param string $aSavePath Destination.
+	 *
+	 * @return boolean
+	 */
+	protected function _moveUploadedFile($aTmpName, $aSavePath)
+	{
+		if (self::$test === true) {
+			if (file_exists($aTmpName)) {
+				return copy($aTmpName, $aSavePath);
+			}
 			return false;
 		}
+		// @codeCoverageIgnoreStart
+		return move_uploaded_file($aTmpName, $aSavePath);
+		// @codeCoverageIgnoreEnd
 	}
 }

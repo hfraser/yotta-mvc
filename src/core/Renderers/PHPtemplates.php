@@ -89,14 +89,11 @@ class PHPtemplates extends ARenderer
 	{
 		$myVarName = $aDataName;
 		// check if we are looking for a deep reference
-		if (strstr($aDataName, '/') == strlen($aDataName) - 1) {
-			$myVarName = substr($aDataName, -1);
+		if (strstr($myVarName, '/')) {
+			$tmpVarArray = explode('/', $myVarName);
+			return $this->_getDeepReference($tmpVarArray, $this->_data);
 		}
-
-		if (strstr($aDataName, '/')) {
-			$myVarName = explode('/', $aDataName);
-			return _getDeepReference($myVarName, $this->_data);
-		}
+		
 		if (isset($this->_data->$myVarName)) {
 			return $this->_data->$myVarName;
 		}
@@ -115,10 +112,10 @@ class PHPtemplates extends ARenderer
 	protected function _getDeepReference(array $aArray, $aData)
 	{
 		if ((is_object($aData))
-				&& count($aArray) > 1) {
+				&& count($aArray) > 1 && isset($aData->$aArray[0])) {
 			$aData = $aData->$aArray[0];
 			array_shift($aArray);
-			return ee($aArray, $aData);
+			return $this->_getDeepReference($aArray, $aData);
 		}
 		if (isset($aData->$aArray[0])) {
 			return $aData->$aArray[0];
@@ -136,7 +133,10 @@ class PHPtemplates extends ARenderer
 	 */
 	public function getHelper($aDomain)
 	{
-		return $this->_helpers->$aDomain;
+		if (isset($this->_helpers->$aDomain)) {
+			return $this->_helpers->$aDomain;
+		}
+		throw (new \BadFunctionCallException());
 	}
 
 	/**
@@ -148,9 +148,9 @@ class PHPtemplates extends ARenderer
 	 */
 	public function render()
 	{
-		if (file_exists(ACTION_ROOT . $this->_template)) {
+		if (file_exists($this->_templateDir . $this->_template)) {
 			ob_start();
-			include(ACTION_ROOT . $this->_template);
+			include($this->_templateDir . $this->_template);
 			return ob_get_clean();
 		}
 		throw(new CMFileDoesNotExist("Template :: {$this->_template}"));

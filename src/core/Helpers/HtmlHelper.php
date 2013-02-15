@@ -52,7 +52,7 @@ class HtmlHelper
 	 */
 	public function __construct()
 	{
-		$this->_request = App::getRequest();
+		$this->_request = Url::getInstance();
 	}
 	
 	/**

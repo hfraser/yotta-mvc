@@ -2,11 +2,11 @@
 	"DEBUG":true,
 	"minify": true,
 	"basepath": "/",
-	"renderer": "core\\Renderers\\PHPtemplates",
+	"renderer": "PHPtemplates",
 	"DB":{
 		"type":"sqlite",
 		"name":"",
-		"host":"../data/data.db",
+		"host":"../data/data.sqlite",
 		"port":"",
 		"user":"user",
 		"password":"password"

@@ -29,6 +29,13 @@ namespace core\Renderers;
 abstract class ARenderer
 {
 	/**
+	 * Path to the template directory.
+	 *
+	 * @var string
+	 */
+	protected $_templateDir;
+	
+	/**
 	 * Data for the template
 	 *
 	 * @var \stdClass|array
@@ -55,6 +62,29 @@ abstract class ARenderer
 	abstract public function __construct();
 
 	/**
+	 * Set the base directory template for the renderer.
+	 *
+	 * @param string $aTempalteDir Path to the base template directory.
+	 *
+	 * @return self
+	 */
+	public function setTemplateDir($aTempalteDir)
+	{
+		$this->_templateDir = $aTempalteDir;
+		return $this;
+	}
+	
+	/**
+	 * Get the base directory template for the renderer.
+	 *
+	 * @return string
+	 */
+	public function getTemplateDir()
+	{
+		return $this->_templateDir;
+	}
+	
+	/**
 	 * Load template.
 	 *
 	 * Template to load.
@@ -68,7 +98,17 @@ abstract class ARenderer
 		$this->_template = $aTemplate;
 		return $this;
 	}
-
+	
+	/**
+	 * Get the loaded template.
+	 *
+	 * @return string
+	 */
+	public function getTemplate()
+	{
+		return $this->_template;
+	}
+	
 	/**
 	 * Add helper to the renderer.
 	 *
@@ -83,6 +123,16 @@ abstract class ARenderer
 	 */
 	abstract public function addHelper($aName, $aHelper);
 
+	/**
+	 * Get a helper from the helper collection.
+	 *
+	 * @param string $aName Helper Access name.
+	 *
+	 * @return mixed
+	 * @throws \BadFunctionCallException If the helper is not found.
+	 */
+	abstract public function getHelper($aName);
+	
 	/**
 	 * Add data for the template to be rendered.
 	 *

@@ -26,10 +26,9 @@ use core\Patterns\ASingleton;
  */
 class Url extends ASingleton
 {
-	
 	/**
 	 * Base path to the URL Root of this application instalation
-	 * 
+	 *
 	 * @var string
 	 */
 	public $basepath = '/';
@@ -49,7 +48,7 @@ class Url extends ASingleton
 		'post'     => array(),
 		'files'     => array()
 	);
-
+	
 	
 	/**
 	 * Url Constructor.
@@ -78,9 +77,11 @@ class Url extends ASingleton
 		if (isset(self::$_request[$aKey])) {
 			return self::$_request[$aKey];
 		}
-		return false;
+		trigger_error("CALL to Undefined Property " . __CLASS__ . "::{$aKey}", E_USER_WARNING);
+		// @codeCoverageIgnoreStart
 	}
-
+	// @codeCoverageIgnoreEnd
+	
 	/**
 	 * Public setter for request current action.
 	 *
@@ -119,8 +120,7 @@ class Url extends ASingleton
 		$myPath = $_SERVER['REQUEST_URI'];
 
 		if (stripos($myPath, "?") !== false) {
-			$myParts = explode('?', $myPath, 2);
-			$myPath = $myParts[0];
+			$myPath = substr($myPath, 0, stripos($myPath, "?"));
 		}
 
 		// clean slashes in the url to compensate for user stupidity!!!
@@ -156,8 +156,7 @@ class Url extends ASingleton
 		? 'https' : 'http';
 		return $this;
 	}
-
-
+	
 	/**
 	 * Remove the first element of the path.
 	 *
@@ -176,27 +175,27 @@ class Url extends ASingleton
 	 *
 	 * @param string $aRoute  Route name.
 	 * @param string $aLang   Url language version.
-	 * @param array  $aAction Action we want to call on the route.
+	 * @param string $aAction Action we want to call on the route.
 	 *
 	 * @return string
 	 */
-	public static function getUrl($aRoute, $aLang = null, array $aAction = null)
+	public static function getUrl($aRoute, $aLang = null, $aAction = null)
 	{
 		$aLang = (is_null($aLang))? self::$_request['lang'] : $aLang;
 		if (isset(App::$config->routing->$aRoute) && $aRoute != 'index') {
-			$myUrl = $this->basepath . $aLang . "/" . $aRoute;
+			$myUrl = self::getInstance()->basepath . $aLang . "/" . $aRoute;
 			if (!is_null($aAction)) {
 				$myUrl .= "/{$aAction}";
 			}
 			return $myUrl;
 		}
-
-		return $this->basepath . "{$aLang}/";
+		
+		return self::getInstance()->basepath . "{$aLang}/";
 	}
 	
 	/**
 	 * Get the current language.
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function getCurrentLang()
@@ -206,7 +205,7 @@ class Url extends ASingleton
 	
 	/**
 	 * Get the default language for the application.
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function getDefaultLang()
@@ -216,7 +215,7 @@ class Url extends ASingleton
 	
 	/**
 	 * Get all available languages.
-	 * 
+	 *
 	 * @return array
 	 */
 	public static function getAllLang()
@@ -226,16 +225,22 @@ class Url extends ASingleton
 	
 	/**
 	 * Get the full Root URL (explecit http:// ....).
-	 * 
+	 *
 	 * This will also include the base path of the application.
-	 * 
+	 *
 	 * @param string $aLanguage Active language code.
-	 * 
+	 *
 	 * @return string
 	 */
 	public static function getRootUrl($aLanguage = null)
 	{
-		$myLang = (!is_null($aLanguage) && in_array($aLanguage, App::$config->lang->avail))? $aLanguage . '/' : '';
-		return self::$_request['protocol'] . '://' . self::$_request['host'] . self::getInstance()->basepath . $myLang;
+		$myLang = '';
+		if (!is_null($aLanguage) && in_array($aLanguage, App::$config->lang->avail)) {
+			$myLang = $aLanguage . '/';
+		}
+		return self::$_request['protocol']
+				. '://' . self::$_request['host']
+				. self::getInstance()->basepath
+				. $myLang;
 	}
 }

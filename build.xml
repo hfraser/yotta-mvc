@@ -57,7 +57,7 @@
 				</if>
 				<property name="env.BUILD_NUMBER" value="DEV-${DSTAMP}-${TSTAMP}" override="yes" />
 				<!-- unquote the following line if you are running in an svn environement -->
-				<!-- <svnlastrevision svnpath="${envconf.svnpath}" workingcopy="${project.basedir}" propertyname="env.SVN_REVISION" /> -->				
+				<!-- <svnlastrevision svnpath="${envconf.svnpath}" workingcopy="${project.basedir}" propertyname="env.SVN_REVISION" /> -->
 			</else>
 		</if>
 		<if>
@@ -70,7 +70,7 @@
 				<mkdir dir="${builddir}" />
 				<echo level="info" msg="    Creating ${logdir} !" />
 				<mkdir dir="${logdir}" />
-				<mkdir dir="${release.dir}/" />				
+				<mkdir dir="${release.dir}/" />
 			</then>
 		</if>
 		<property name="rlname" value="cmul_${env.BUILD_NUMBER}" />
@@ -254,11 +254,17 @@ date : ${DATE}</echo>
 		<delete dir="${builddir}/tmp" />
 	</target>
 
+	<target name="phpunit" depends="prepare" description="PHP-Unit Coverage">
+		<mkdir dir="${logdir}/unit-test-html"/>
+		<exec command="phpunit --configuration test/phpunit.xml" />
+	</target>
+
 	<target name="validate-source" description="Validate all the current code">
 		<phingcall target="phpdoc" />
 		<phingcall target="checkstyle" />
 		<phingcall target="phpmd" />
 		<phingcall target="pdepend" />
 		<phingcall target="phpcpd" />
+		<phingcall target="phpunit" />
 	</target>
 </project>

@@ -80,9 +80,9 @@ class MinifyHelper extends ASingleton
 		
 		// iterate through the provided files
 		foreach ($aCssFiles as $data) {
-			if (strpos($data->path, "http://" === 0) && strpos($data->path, "https://" === 0)) {
+			if (strpos($data->path, "http://") === 0 || strpos($data->path, "https://") === 0) {
 				// add the css to the list of files to minify only if it's content is available localy
-				$myNewList[] = $myNewList[] = array(
+				$myNewList[] = array(
 						"media" => $data->media,
 						"path" => $data->path
 					);
@@ -91,7 +91,6 @@ class MinifyHelper extends ASingleton
 				$parseList[$data->media][] = $data->path;
 			}
 		}
-		
 		
 		// now that we have our media based parse list
 		// we can begin to create the proper minification files.
@@ -124,9 +123,9 @@ class MinifyHelper extends ASingleton
 		$myNewList = array();
 		// iterate through the provided files
 		foreach ($aJSFiles as $data) {
-			if (strpos($data, "http://" === 0) && strpos($data, "https://" === 0)) {
+			if (strpos($data, "http://") === 0 || strpos($data, "https://") === 0) {
 				// add the css to the list of files to minify only if it's content is available localy
-				$myNewList[] = $data->path;
+				$myNewList[] = $data;
 			} else {
 				// if content is not for local consumption add it to the save path
 				$parseList[] = $data;

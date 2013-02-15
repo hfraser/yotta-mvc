@@ -60,6 +60,17 @@ class FormHelper
 		return isset($this->_errors->$aField->message)? $this->_errors->$aField->message : false;
 	}
 	
+	
+	/**
+	 * Get All Errors.
+	 *
+	 * @return stdClass
+	 */
+	public function getErrors()
+	{
+		return $this->_errors;
+	}
+	
 	/**
 	 * Get a specific error type for a specific form field.
 	 *
@@ -68,7 +79,7 @@ class FormHelper
 	 * @return boolean|string This function returns either the type string
 	 *                        or false if there is no error on the specific field.
 	 */
-	protected function _getErrorType($aField)
+	public function getErrorType($aField)
 	{
 		return isset($this->_errors->$aField->error)? $this->_errors->$aField->error : false;
 	}

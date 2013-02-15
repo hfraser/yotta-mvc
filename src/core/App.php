@@ -85,7 +85,7 @@ class App extends ASingleton{
 	public function run()
 	{
 		$this->_initORM();
-		self::getRequest();
+		$this->request = Url::getInstance();
 		// Initialize translations
 		$this->_initGettext();
 		// get the action to call
@@ -121,7 +121,7 @@ class App extends ASingleton{
 	{
 		if (self::$config->DB->type === 'sqlite') {
 			\R::setup(
-				'sqlite:' . self::$config->DB->host,
+				'sqlite:' . DATA_DIR . self::$config->DB->host,
 			self::$config->DB->user,
 			self::$config->DB->password);
 		} else {
@@ -152,7 +152,9 @@ class App extends ASingleton{
 				$myType = self::$config->routing->$myRoute->type;
 				$myAction = $myRoute;
 			} else {
+				// @codeCoverageIgnoreStart
 				self::throw404();
+				// @codeCoverageIgnoreEnd
 			}
 		}
 		
@@ -163,25 +165,13 @@ class App extends ASingleton{
 		} elseif ($myType == self::CM_SERVICES) {
 			return 'services\\' . self::$config->routing->$myAction->link;
 		} else {
+			// @codeCoverageIgnoreStart
 			self::throw404();
+			
 		}
 	}
-
-	/**
-	 * General Request Getter.
-	 *
-	 * This function should never be called without having the App allready initialized.
-	 *
-	 * @return Url
-	 */
-	public static function getRequest()
-	{
-		if (is_null(self::getInstance()->request)) {
-			self::getInstance()->request = Url::getInstance();
-		}
-		return self::getInstance()->request;
-	}
-
+	// @codeCoverageIgnoreEnd
+	
 	/**
 	 * Initialize gettext to handle al multilingual strings.
 	 *
@@ -210,9 +200,19 @@ class App extends ASingleton{
 	 */
 	public static function throw404()
 	{
-		header("HTTP/1.0 404 Not Found");
+		if (!headers_sent()) {
+			// @codeCoverageIgnoreStart
+			header("HTTP/1.0 404 Not Found");
+			
+		}
+		// @codeCoverageIgnoreEnd
+		
 		PageParser::getContent('404');
-		exit();
+		if (!self::$config->DEBUG) {
+			// @codeCoverageIgnoreStart
+			exit();
+			// @codeCoverageIgnoreEnd
+		}
 	}
 	
 	/**
@@ -230,7 +230,9 @@ class App extends ASingleton{
 		$myDirName = CM_CACHE . $aDirName;
 		if (!is_dir(CM_CACHE . $aDirName)) {
 			if (!@mkdir($myDirName , '0744', true)) {
+				// @codeCoverageIgnoreStart
 				throw(new CMPathNotWritable($myDirName));
+				// @codeCoverageIgnoreEnd
 			}
 		}
 		return $myDirName;
@@ -250,7 +252,9 @@ class App extends ASingleton{
 	public static function writeCacheFile($aFilePath, $aContent)
 	{
 		if (file_put_contents(CM_CACHE . $aFilePath, $aContent) === false) {
+			// @codeCoverageIgnoreStart
 			throw(new CMPathNotWritable(CM_CACHE . $aFilePath, $aContent));
+			// @codeCoverageIgnoreEnd
 		}
 	}
 }

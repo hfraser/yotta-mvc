@@ -62,23 +62,25 @@ class Assets extends AService
 	/**
 	 * Get css from cache action.
 	 *
+	 * @param array $aFile The file to load.
+	 *
 	 * @return void
 	 */
-	protected function _cssAction()
+	protected function _cssAction(array $aFile = null)
 	{
-		list($args) = func_get_args();
-		$this->_returnFile($args[0], self::CSS_TYPE);
+		$this->_returnFile($aFile[0], self::CSS_TYPE);
 	}
 
 	/**
 	 * Get js from cache action.
 	 *
+	 * @param array $aFile The file to load.
+	 *
 	 * @return void
 	 */
-	protected function _jsAction()
+	protected function _jsAction(array $aFile = null)
 	{
-		list($args) = func_get_args();
-		$this->_returnFile($args[0], self::JS_TYPE);
+		$this->_returnFile($aFile[0], self::JS_TYPE);
 	}
 
 	/**
@@ -101,15 +103,23 @@ class Assets extends AService
 				$contentType = "text/javascript";
 				break;
 		}
-
-		header("Content-Type: " . $contentType . "; charset=UTF-8");
+		if (!headers_sent()) {
+			// @codeCoverageIgnoreStart
+			header("Content-Type: " . $contentType . "; charset=UTF-8");
+		}
+		// @codeCoverageIgnoreEnd
+		
 		if (file_exists(CM_CACHE . $aFileType . DS . $aFile)) {
-			if (extension_loaded("zlib") && (ini_get("output_handler") != "ob_gzhandler")) {
-				ini_set("zlib.output_compression", 1);
-				header("Content-Encoding: gzip");
+			// @codeCoverageIgnoreStart
+			if (!headers_sent()) {
+				if (extension_loaded("zlib") && (ini_get("output_handler") != "ob_gzhandler")) {
+					ini_set("zlib.output_compression", 1);
+					header("Content-Encoding: gzip");
+				}
+				header('Cache-Control: max-age=32850000');
+				header("File-Name: " . $aFile);
 			}
-			header('Cache-Control: max-age=32850000');
-			header("File-Name: " . $aFile);
+			// @codeCoverageIgnoreEnd
 			readfile(CM_CACHE . $aFileType . DS . $aFile);
 		} else {
 			App::throw404();

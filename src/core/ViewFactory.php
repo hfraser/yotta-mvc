@@ -11,9 +11,9 @@
  * @filesource
  */
 namespace core;
-use core\Renderers;
+use core\Renderers\ARenderer;
 use core\Helpers\HtmlHelper;
-use core\App;
+use core\Url;
 
 /**
  * View Factory
@@ -36,31 +36,36 @@ class ViewFactory
 	static protected $_renderer;
 
 	/**
-	 * Base View Constructor blocked from being instantiated.
-	 */
-	protected function __construct()
-	{}
-
-	/**
 	 * Set the base data from the application.
 	 *
 	 * The data set will be accessible to all templates. and all renderer.
 	 *
-	 * @param string $aRenderer Name of the render to provide. [optional]
-	 *                          If a renderer is not provided the system will use the
-	 *                          global configuration.
+	 * @param string  $aRenderer    Name of the render to provide. [optional]
+	 *                              If a renderer is not provided the system will use the
+	 *                              global configuration.
+	 * @param boolean $aSetBaseData Tell the rendered to not des the base sada [default = true].
 	 *
 	 * @return ARenderer
 	 */
-	public static function getView($aRenderer = null)
+	public static function getView($aRenderer = null, $aSetBaseData = true)
 	{
 		if (!isset(self::$_renderer)) {
 			self::$_renderer = (isset(App::$config->renderer))?
-				App::$config->renderer : 'core\Renderers\PHPtemplates';
+				App::$config->renderer : 'PHPtemplates';
 		}
+		
 		$myRendererClass = ($aRenderer)?: self::$_renderer;
+		$myRendererClass = "core\\Renderers\\{$myRendererClass}";
+		/**
+		 * @var ARenderer
+		 */
 		$myRenderer = new $myRendererClass;
-		self::_setBaseData($myRenderer);
+		$myRenderer->setTemplateDir(TEMPLATE_ROOT);
+		
+		if ($aSetBaseData) {
+			self::_setBaseData($myRenderer);
+		}
+		
 		return $myRenderer;
 	}
 
@@ -75,13 +80,12 @@ class ViewFactory
 	 */
 	protected static function _setBaseData($aRenderer)
 	{
-		$request = App::getRequest();
+		$request = Url::getInstance();
 		$aRenderer->addHelper('request', $request);
 		$aRenderer->addHelper('html', new HtmlHelper());
 		$aRenderer->addData('lang', $request->lang);
 		$aRenderer->addData('languages', $request->getAllLang());
 		$aRenderer->addData('defaultLang', $request->getDefaultLang());
-		$aRenderer->addData('action', $request->currentAction);
 		$aRenderer->addData('basepath', $request->basepath);
 		$aRenderer->addData('urlroot', $request->basepath);
 	}

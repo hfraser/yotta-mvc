@@ -12,10 +12,11 @@
  */
 namespace core;
 use core\Helpers\FileUploadHelper;
-
 use core\Helpers\FormHelper;
-
+use core\Exceptions\CMFileUploadException;
+use core\Exceptions\CMFileUploadExceptionInvalidFormat;
 use core\Exceptions\CMPathNotWritable;
+use core\Exceptions\CMFileUploadMissingException;
 
 /**
  * Base abstract form class.
@@ -92,11 +93,18 @@ abstract class AServiceForm extends AService {
 	protected $_formData;
 
 	/**
+	 * Base form configuration.
+	 *
+	 * @var \stdClass
+	 */
+	protected $_config;
+	
+	/**
 	 * Class constructor.
 	 */
 	public function __construct()
 	{
-		$this->_request = App::getRequest();
+		$this->_request = Url::getInstance();
 		$this->_config = $this->_setConfig();
 		$this->_errors = new \stdClass;
 		$this->_schema = __DIR__ . DS . 'FormValidate.xsd';
@@ -187,12 +195,14 @@ abstract class AServiceForm extends AService {
 	protected function _validate()
 	{
 		foreach ($this->_config->values as $key => $elConf) {
-			if ($elConf[0] === 'file') {
+			if ($elConf[0] === 'file' || $elConf[0] === 'filemultiple') {
 				try {
 					$this->_formData->$key = FileUploadHelper::getInstance()->handleFormUpload($key, $elConf);
 				} catch (CMFileUploadException $e) {
 					$this->_addFormError($key, self::ERROR_BAD_DATA);
 				} catch (CMFileUploadMissingException $e) {
+					$this->_addFormError($key, self::ERROR_NO_DATA);
+				} catch (CMFileUploadExceptionInvalidFormat $e) {
 					$this->_addFormError($key, self::ERROR_NO_DATA);
 				}
 			} else {

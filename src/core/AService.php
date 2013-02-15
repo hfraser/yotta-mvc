@@ -12,7 +12,6 @@
  */
 namespace core;
 use core\Helpers\HtmlHelper;
-
 /**
  * Base abstract service class
  *
@@ -39,7 +38,7 @@ abstract class AService {
 	 */
 	public function __construct($aAction = null)
 	{
-		$this->_request = App::getRequest();
+		$this->_request = Url::getInstance();
 		$this->call($aAction);
 	}
 
@@ -53,14 +52,14 @@ abstract class AService {
 	 *
 	 * @return mixed
 	 */
-	public function call($aAction)
+	public function call($aAction = null)
 	{
 		if (is_null($aAction)) {
-			$aAction = (isset($this->_request->path[0]))? '_' . $this->_request->path[0] . 'Action': '_indexAction';
+			$aAction = (isset($this->_request->path[0]))? $this->_request->path[0]: 'index';
 		}
+		$aAction = '_' . $aAction . 'Action';
 		if (method_exists($this, $aAction)) {
 			$this->_request->shiftPath();
-			
 			return $this->$aAction($this->_request->path);
 		}
 		$this->_indexAction($this->_request->path);

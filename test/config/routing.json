@@ -1,0 +1,20 @@
+{
+	"routing":{
+		"index":{
+			"type":"page",
+			"link":"index.php"
+			},
+		"404":{
+			"type":"page",
+			"link":"404.php"
+			},
+		"assets":{
+			"type":"service",
+			"link":"Assets"
+			},
+		"test":{
+			"type":"service",
+			"link":"TestService"
+		}
+	}
+}

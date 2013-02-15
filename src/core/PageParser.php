@@ -52,7 +52,7 @@ class PageParser
 				->loadTemplate($myTemplate)
 				->render();
 		} else {
-			throw(new BadMethodCallException(
+			throw(new \BadMethodCallException(
 				"ROUTE : {$aRoute} does not exists in the routing table"
 			));
 		}
