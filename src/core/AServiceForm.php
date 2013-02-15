@@ -2,8 +2,6 @@
 /**
  * Base abstract form class.
  *
- * @todo Add documentation and tutorial on how to create new forms
- *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
  * @copyright  2012 Hans-Frederic Fraser
@@ -13,6 +11,12 @@
  * @filesource
  */
 namespace core;
+use core\Helpers\FileUploadHelper;
+use core\Helpers\FormHelper;
+use core\Exceptions\CMFileUploadException;
+use core\Exceptions\CMFileUploadExceptionInvalidFormat;
+use core\Exceptions\CMPathNotWritable;
+use core\Exceptions\CMFileUploadMissingException;
 
 /**
  * Base abstract form class.
@@ -26,6 +30,7 @@ namespace core;
  * @package  Core
  */
 abstract class AServiceForm extends AService {
+	
 	/**
 	 * No data Error constant.
 	 *
@@ -85,18 +90,26 @@ abstract class AServiceForm extends AService {
 	 *
 	 * @var \RedBean_OODBBean
 	 */
-	protected $_formData = array();
+	protected $_formData;
 
+	/**
+	 * Base form configuration.
+	 *
+	 * @var \stdClass
+	 */
+	protected $_config;
+	
 	/**
 	 * Class constructor.
 	 */
 	public function __construct()
 	{
-		$this->_request = App::getRequest();
+		$this->_request = Url::getInstance();
 		$this->_config = $this->_setConfig();
 		$this->_errors = new \stdClass;
 		$this->_schema = __DIR__ . DS . 'FormValidate.xsd';
 		$this->_modelName = $this->_config->modelName;
+		$this->_formData = \R::dispense($this->_modelName);
 		parent::__construct();
 	}
 
@@ -132,7 +145,7 @@ abstract class AServiceForm extends AService {
 	 */
 	protected function _indexAction()
 	{
-		include($this->_config->templates[self::INDEX_ACTION]);
+		echo $this->_renderConfigTemplate(self::INDEX_ACTION);
 	}
 
 	/**
@@ -161,7 +174,7 @@ abstract class AServiceForm extends AService {
 	protected function _success()
 	{
 		$this->_saveData($this->_formData);
-		include($this->_config->templates[self::SUCCESS_ACTION]);
+		echo $this->_renderConfigTemplate(self::SUCCESS_ACTION);
 	}
 
 	/**
@@ -171,7 +184,7 @@ abstract class AServiceForm extends AService {
 	 */
 	protected function _fail()
 	{
-		include($this->_config->templates[self::FAIL_ACTION]);
+		echo $this->_renderConfigTemplate(self::FAIL_ACTION);
 	}
 
 	/**
@@ -181,24 +194,45 @@ abstract class AServiceForm extends AService {
 	 */
 	protected function _validate()
 	{
-		$this->_formData = \R::dispense($this->_modelName);
 		foreach ($this->_config->values as $key => $elConf) {
-			$tmpValue = (isset($this->_request->post[$key])) ? $this->_request->post[$key] : '';
-			$this->_formData->$key = $tmpValue;
-			if (!empty($tmpValue)) {
-				if (!$this->_validateEL($elConf[0], $tmpValue)) {
-					$this->_errors->$key = new \stdClass;
-					$this->_errors->$key->error = self::ERROR_BAD_DATA;
-					$this->_errors->$key->message = $this->_getErrorString($key, self::ERROR_BAD_DATA);
+			if ($elConf[0] === 'file' || $elConf[0] === 'filemultiple') {
+				try {
+					$this->_formData->$key = FileUploadHelper::getInstance()->handleFormUpload($key, $elConf);
+				} catch (CMFileUploadException $e) {
+					$this->_addFormError($key, self::ERROR_BAD_DATA);
+				} catch (CMFileUploadMissingException $e) {
+					$this->_addFormError($key, self::ERROR_NO_DATA);
+				} catch (CMFileUploadExceptionInvalidFormat $e) {
+					$this->_addFormError($key, self::ERROR_NO_DATA);
 				}
-			} elseif ($elConf[1] === true) {
-				$this->_errors->$key = new \stdClass;
-				$this->_errors->$key->error = self::ERROR_NO_DATA;
-				$this->_errors->$key->message = $this->_getErrorString($key, self::ERROR_NO_DATA);
+			} else {
+				$tmpValue = (isset($this->_request->post[$key])) ? $this->_request->post[$key] : '';
+				$this->_formData->$key = $tmpValue;
+				if (!empty($tmpValue)) {
+					if (!$this->_validateEL($elConf[0], $tmpValue)) {
+						$this->_addFormError($key, self::ERROR_BAD_DATA);
+					}
+				} elseif ($elConf[1] === true) {
+					$this->_addFormError($key, self::ERROR_NO_DATA);
+				}
 			}
 		}
 	}
 
+	/**
+	 * Add an error to the error list.
+	 *
+	 * @param string $aKey       Key of the form element.
+	 * @param string $aErrorType Type of the error.
+	 *
+	 * @return void
+	 */
+	protected function _addFormError($aKey, $aErrorType)
+	{
+		$this->_errors->$aKey = new \stdClass;
+		$this->_errors->$aKey->error = $aErrorType;
+		$this->_errors->$aKey->message = $this->_getErrorString($aKey, $aErrorType);
+	}
 	/**
 	 * Validate a single element agains the xsd.
 	 *
@@ -228,68 +262,6 @@ abstract class AServiceForm extends AService {
 	}
 
 	/**
-	 * Get a specific error message for a specific form field.
-	 *
-	 * @param string $aField Form field that we require the error message from.
-	 *
-	 * @return boolean|string This function returns either the message string
-	 *                        or false if there is no error on the specific field.
-	 */
-	protected function _getError($aField)
-	{
-		return isset($this->_errors->$aField->message)? $this->_errors->$aField->message : false;
-	}
-
-	/**
-	 * Get a specific error type for a specific form field.
-	 *
-	 * @param string $aField Form field that we require the error type from.
-	 *
-	 * @return boolean|string This function returns either the type string
-	 *                        or false if there is no error on the specific field.
-	 */
-	protected function _getErrorType($aField)
-	{
-		return isset($this->_errors->$aField->error)? $this->_errors->$aField->error : false;
-	}
-
-	/**
-	 * Get the data for a specific field.
-	 *
-	 * @param string $aField Form field you want the data for.
-	 *
-	 * @return mixed Field data.
-	 */
-	protected function _getData($aField)
-	{
-		$myValue = null;
-		if (strpos($aField, "[") !== false && strpos($aField, "]") !== false) {
-			$myMatches = preg_split('@[\]\[]|\[|\]@i', $aField, -1, PREG_SPLIT_NO_EMPTY);
-			foreach ($myMatches as $idx => $arrayKey) {
-				if (is_null($myValue)) {
-					$myValue = $this->_formData;
-				}
-				if (!isset($myValue[$arrayKey])) {
-					return '';
-				}
-				if (!is_array($myValue[$arrayKey]) && $idx < count($myMatches) - 1) {
-					return '';
-				}
-				$myValue = $myValue[$arrayKey];
-			}
-			return $myValue;
-		}
-		if (!isset($this->_formData[$aField])) {
-			return '';
-		}
-		if (is_array($this->_formData[$aField])) {
-			return htmlspecialchars(implode(',', $this->_formData[$aField]));
-		}
-		$myValue = (isset($this->_formData[$aField]))? htmlspecialchars($this->_formData[$aField]) : '';
-		return $myValue;
-	}
-
-	/**
 	 * Get the text value for the message string attached to a specific field.
 	 *
 	 * @param string $aField     Field we require the error message from.
@@ -303,5 +275,23 @@ abstract class AServiceForm extends AService {
 			return $this->_config->messages[$aField][$aErrorType];
 		}
 		return $this->_config->messages['default'][$aErrorType];
+	}
+	
+	/**
+	 * Render a template integrated in this service configuration.
+	 *
+	 * @param string $myAction Key of configuration action name.
+	 *
+	 * @return string
+	 */
+	protected function _renderConfigTemplate($myAction)
+	{
+		$myFormHelper = new FormHelper();
+		$myFormHelper->setErrors($this->_errors);
+		return ViewFactory::getView()
+			->loadTemplate($this->_config->templates[$myAction])
+			->addData('formData', $this->_formData->export())
+			->addHelper('form', $myFormHelper)
+			->render();
 	}
 }

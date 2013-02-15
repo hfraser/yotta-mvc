@@ -27,7 +27,7 @@ use core\Patterns\ASingleton;
  * @package    Core
  * @subpackage Helpers
  */
-class MinifyHelper extends ASingleton 
+class MinifyHelper extends ASingleton
 {
 	
 	const CSS_TYPE = 'css';
@@ -41,9 +41,9 @@ class MinifyHelper extends ASingleton
 	
 	/**
 	 * Minify all files in a Styles config file (config/styles.json).
-	 * 
+	 *
 	 * @param string $aStylesFile Path to the styles.json config file.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function minifyStyles($aStylesFile)
@@ -66,11 +66,11 @@ class MinifyHelper extends ASingleton
 
 	/**
 	 * Minify a css group.
-	 * 
+	 *
 	 * Concatenante and minify a full CSS group keeping seperate the medias
-	 *  
+	 *
 	 * @param array|\stdClass $aCssFiles List of css files t group and minify.
-	 * 
+	 *
 	 * @return array
 	 */
 	private function _parseCSSGroup($aCssFiles)
@@ -80,9 +80,9 @@ class MinifyHelper extends ASingleton
 		
 		// iterate through the provided files
 		foreach ($aCssFiles as $data) {
-			if (strpos($data->path, "http://" === 0) && strpos($data->path, "https://" === 0)) {
+			if (strpos($data->path, "http://") === 0 || strpos($data->path, "https://") === 0) {
 				// add the css to the list of files to minify only if it's content is available localy
-				$myNewList[] = $myNewList[] = array(
+				$myNewList[] = array(
 						"media" => $data->media,
 						"path" => $data->path
 					);
@@ -92,8 +92,7 @@ class MinifyHelper extends ASingleton
 			}
 		}
 		
-		
-		// now that we have our media based parse list 
+		// now that we have our media based parse list
 		// we can begin to create the proper minification files.
 		foreach ($parseList as $key => $value) {
 			$parseList[$key] = '/assets/css/' . $this->_minify($value, self::CSS_TYPE);
@@ -111,11 +110,11 @@ class MinifyHelper extends ASingleton
 	
 	/**
 	 * Minify a JS group.
-	 * 
+	 *
 	 * Concatenante and minify a full JS group keeping seperate the medias
-	 *  
+	 *
 	 * @param array|\stdClass $aJSFiles List of JS files to group and minify.
-	 * 
+	 *
 	 * @return array
 	 */
 	private function _parseJSGroup($aJSFiles)
@@ -124,9 +123,9 @@ class MinifyHelper extends ASingleton
 		$myNewList = array();
 		// iterate through the provided files
 		foreach ($aJSFiles as $data) {
-			if (strpos($data, "http://" === 0) && strpos($data, "https://" === 0)) {
+			if (strpos($data, "http://") === 0 || strpos($data, "https://") === 0) {
 				// add the css to the list of files to minify only if it's content is available localy
-				$myNewList[] = $data->path;
+				$myNewList[] = $data;
 			} else {
 				// if content is not for local consumption add it to the save path
 				$parseList[] = $data;
@@ -140,10 +139,10 @@ class MinifyHelper extends ASingleton
 	
 	/**
 	 * Minify JS or CSS Data.
-	 * 
+	 *
 	 * @param array  $aFileList List of files to minify.
 	 * @param string $aType     Type of files to minify.
-	 * 
+	 *
 	 * @return string
 	 */
 	private function _minify(array $aFileList, $aType)
@@ -164,17 +163,17 @@ class MinifyHelper extends ASingleton
 		}
 		// save file with proper name and hash
 		$myFname = md5($myFileData);
-		$myDir = App::mkCacheDir($aType);
+		App::mkCacheDir($aType);
 		App::writeCacheFile($aType . DS . $myFname, $myFileData);
 		return $myFname;
 	}
 	
 	/**
 	 * Concatenate a group of files.
-	 * 
+	 *
 	 * @param array  $aFiles    List of files to concatenate.
 	 * @param string $aBasePath Path relative to the public folder.
-	 * 
+	 *
 	 * @return string
 	 */
 	private function _concatenateFiles(array $aFiles, $aBasePath)

@@ -12,4 +12,5 @@
  * @filesource
  */
 require '../bootstrap.php';
-$app->run();
+use core\App;
+App::getInstance()->run();

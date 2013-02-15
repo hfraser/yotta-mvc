@@ -1,0 +1,18 @@
+{
+	"DEBUG":false,
+	"minify": true,
+	"basepath": "/",
+	"renderer": "PHPtemplates",
+	"DB":{
+		"type":"sqlite",
+		"name":"",
+		"host":"data.sqlite",
+		"port":"",
+		"user":"user",
+		"password":"password"
+	},
+	"lang":{
+		"default":"en",
+		"avail":["fr","en"]
+	}
+}

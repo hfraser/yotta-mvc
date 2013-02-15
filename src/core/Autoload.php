@@ -24,6 +24,10 @@
 class Autoload
 {
 	/**
+	 *
+	 */
+	public static $test = false;
+	/**
 	 * Singleton current instance
 	 *
 	 * @var self
@@ -80,7 +84,7 @@ class Autoload
 	 */
 	public static final function getInstance()
 	{
-		if (!isset(self::$_instance)) {
+		if (!isset(self::$_instance) || self::$test) {
 			$class = __CLASS__;
 			self::$_instance = new $class;
 		}
@@ -142,7 +146,7 @@ class Autoload
 	 */
 	public function deleteLoader($aLoadFunction, $aDeleteNow = true)
 	{
-		if (in_array($this->_loaders, $aLoadFunction)) {
+		if (in_array($aLoadFunction, $this->_loaders)) {
 			$this->_loaders = array_diff($this->_loaders, array($aLoadFunction));
 			$this->_loaders = array_values($this->_loaders);
 			if ($aDeleteNow) {
@@ -223,14 +227,12 @@ class Autoload
 	 */
 	public static function namespaceAutoload($aClassName)
 	{
-		if (!class_exists($aClassName)) {
-			if (count(self::$_instance->_registeredNamespaces)) {
-				foreach (self::$_instance->_registeredNamespaces as $name => $path) {
-					if (stripos($aClassName, $name) === 0) {
-						$myClassPath = str_replace($name, $path, $aClassName);
-						$myClassPath = str_replace('\\', DS, $aClassName) . '.php';
-						return self::$_instance->_load($myClassPath);
-					}
+		if (count(self::$_instance->_registeredNamespaces)) {
+			foreach (self::$_instance->_registeredNamespaces as $name => $path) {
+				if (stripos($aClassName, $name) === 0) {
+					$myClassPath = str_replace($name, $path, $aClassName);
+					$myClassPath = str_replace('\\', DS, $myClassPath) . '.php';
+					return self::$_instance->_load($myClassPath);
 				}
 			}
 		}
@@ -248,10 +250,8 @@ class Autoload
 	 */
 	public static function baseAutoload($aClassName)
 	{
-		if (!class_exists($aClassName)) {
-			$myClassPath = ROOT_DIR . str_replace(array('\\','_'), DS, $aClassName) . '.php';
-			return self::$_instance->_load($myClassPath);
-		}
+		$myClassPath = ROOT_DIR . str_replace(array('\\','_'), DS, $aClassName) . '.php';
+		return self::$_instance->_load($myClassPath);
 	}
 
 	/**
@@ -267,10 +267,8 @@ class Autoload
 	 */
 	public static function libsAutoload($aClassName)
 	{
-		if (!class_exists($aClassName)) {
-			$myClassPath = LIBS_DIR . str_replace('\\', DS, $aClassName) . '.php';
-			return self::$_instance->_load($myClassPath);
-		}
+		$myClassPath = LIBS_DIR . str_replace('\\', DS, $aClassName) . '.php';
+		return self::$_instance->_load($myClassPath);
 	}
 
 	/**

@@ -101,7 +101,7 @@ abstract class ATask
 			$this->_actions->$aActionName = new \stdClass;
 			$this->_actions->$aActionName->description = $aDescription;
 		} else {
-			throw(new BadFunctionCallException("ERROR : _addAction action {$aActionName} Allready defined"));
+			throw(new \BadFunctionCallException("ERROR : _addAction action {$aActionName} Allready defined"));
 		}
 		return $this;
 	}
@@ -111,14 +111,14 @@ abstract class ATask
 	 *
 	 * @param string $aActionName Action name.
 	 * @param string $aArgName    Name of the argument.
-	 * 
+	 *
 	 * @return self
 	 */
 	protected function _addActionArgs($aActionName, $aArgName)
 	{
 		if (!isset($this->_actions->$aActionName)) {
 			throw(
-				new BadFunctionCallException(
+				new \BadFunctionCallException(
 					"ERROR : _addActionArgs action {$aActionName} Does not exists!"
 				)
 			);
@@ -136,7 +136,7 @@ abstract class ATask
 	 *
 	 * @param string $aActionName Action for wich we are parsing the options.
 	 * @param array  $aOptValues  Values of the options.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function parseOpts($aActionName, array $aOptValues)

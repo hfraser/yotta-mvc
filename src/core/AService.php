@@ -12,7 +12,6 @@
  */
 namespace core;
 use core\Helpers\HtmlHelper;
-
 /**
  * Base abstract service class
  *
@@ -33,21 +32,13 @@ abstract class AService {
 	protected $_request;
 
 	/**
-	 * Html Helper class.
-	 *
-	 * @var HtmlHelper
-	 */
-	public $helper;
-
-	/**
 	 * Class Constructor.
 	 *
 	 * @param string $aAction The action we want to call this defaults to index if no action is set.
 	 */
 	public function __construct($aAction = null)
 	{
-		$this->_request = App::getRequest();
-		$this->helper = new HtmlHelper();
+		$this->_request = Url::getInstance();
 		$this->call($aAction);
 	}
 
@@ -56,27 +47,29 @@ abstract class AService {
 	 *
 	 * This function will redistribute the proper calls to the appropriate
 	 * action in order to execute the desired operation.
-	 * 
+	 *
 	 * @param string $aAction The action we want to call this defaults to index if no action is set.
-	 * 
+	 *
 	 * @return mixed
 	 */
-	public function call($aAction)
+	public function call($aAction = null)
 	{
 		if (is_null($aAction)) {
-			$aAction = (isset($this->_request->path[0]))? '_' . $this->_request->path[0] . 'Action': '_indexAction';
+			$aAction = (isset($this->_request->path[0]))? $this->_request->path[0]: 'index';
 		}
+		$aAction = '_' . $aAction . 'Action';
 		if (method_exists($this, $aAction)) {
-			return $this->$aAction();
+			$this->_request->shiftPath();
+			return $this->$aAction($this->_request->path);
 		}
-		$this->_indexAction();
+		$this->_indexAction($this->_request->path);
 	}
 
 	/**
 	 * Get indexAction values without having the object present.
 	 *
 	 * @param string $aAction The action we want to call this defaults to index if no action is set.
-	 * 
+	 *
 	 * @return self
 	 */
 	public final static function getIndex($aAction = 'index')

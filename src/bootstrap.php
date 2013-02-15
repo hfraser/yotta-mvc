@@ -1,6 +1,6 @@
 <?php
 /**
- * System Bootstrap
+ * System Bootstrap.
  *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
@@ -12,84 +12,100 @@
  */
 
 /**
- * Directory seperator shortcut
+ * Directory seperator shortcut.
  *
  * @var string
  */
 define('DS', DIRECTORY_SEPARATOR);
 
 /**
- * Working directory
+ * Working directory.
  *
  * @var string
  */
 define('ROOT_DIR', __DIR__ . DS);
 
+if (!defined('CONFIG_DIR')) {
+	/**
+	 * Configuration directory.
+	 *
+	 * @var string
+	 */
+	define('CONFIG_DIR', ROOT_DIR . 'config' . DS);
+}
+
 /**
- * Configuration directory
+ * Libs directory.
  *
  * @var string
  */
-define('CONFIG_DIR', ROOT_DIR . 'config' . DS);
+define('LIBS_DIR', ROOT_DIR . 'libs' . DS);
 
 /**
- * Pages directory
- *
- * @var string
- */
-define('LIBS_DIR', __DIR__ . DS . 'libs' . DS);
-
-/**
- * locales directory
+ * locales directory.
  *
  * @var string
  */
 define('LOCALES_DIR', ROOT_DIR . 'locales' . DS );
 
+if (!defined('TEMPLATE_ROOT')) {
+	/**
+	 * Pages directory.
+	 *
+	 * @var string
+	 */
+	define('TEMPLATE_ROOT', ROOT_DIR . 'pages' . DS);
+}
+
 /**
- * Pages directory
+ * Services directory.
  *
  * @var string
  */
-define('ACTION_ROOT', __DIR__ . DS . 'pages' . DS);
+define('SERVICE_ROOT', ROOT_DIR . 'services' . DS);
+
+if (!defined('PUBLIC_ROOT')) {
+	/**
+	 * Public directory.
+	 *
+	 * @var string
+	 */
+	define('PUBLIC_ROOT', ROOT_DIR . 'public' . DS);
+}
+if (!defined('DATA_DIR')) {
+	/**
+	 * Data directory.
+	 *
+	 * @var string
+	 */
+	define('DATA_DIR', ROOT_DIR . 'data' . DS);
+}
 
 /**
- * Services directory
- *
- * @var string
- */
-define('SERVICE_ROOT', __DIR__ . DS . 'services' . DS);
-
-/**
- * Public directory
- *
- * @var string
- */
-define('PUBLIC_ROOT', __DIR__ . DS . 'public' . DS);
-
-/**
- * Data directory
- *
- * @var string
- */
-define('DATA_DIR', __DIR__ . DS . 'data' . DS);
-
-/**
- * Cache directory
+ * Cache directory.
  *
  * @var string
  */
 define('CM_CACHE', DATA_DIR . 'cache' . DS);
 
+if (!defined('CM_UPLOAD_DIR')) {
+	/**
+	 * Cache directory.
+	 *
+	 * @var string
+	 */
+	define('CM_UPLOAD_DIR', PUBLIC_ROOT . 'uploads' . DS);
+}
+
 /**
- * Include Autoload
+ * Include Autoload.
  */
 require 'core/Autoload.php';
 $gAutoload = Autoload::getInstance();
 
 /**
- * Initiate Application
+ * Initiate Application.
  *
  * @var core\App
  */
-$app = core\App::getInstance();
+core\App::getInstance();

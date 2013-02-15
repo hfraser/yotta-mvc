@@ -1,0 +1,29 @@
+{
+	"css":{
+		"main":[
+			{
+				"path":"main.less",
+				"media":"screen"
+			},
+			{
+				"path":"http://www.example.com/my.css",
+				"media":"screen"
+			}
+		],
+		"print":[
+			{
+				"path":"print.css",
+				"media":"print"
+			}
+		]
+	},
+	"js":{
+		"main":[
+			"main.js"
+		],
+		"test":[
+			"test.js",
+			"http://www.example.com/my.js"
+		]
+	}
+}

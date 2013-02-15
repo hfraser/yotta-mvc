@@ -1,0 +1,1 @@
+RENDERED :: <?php echo $this->getData('test'); ?>
