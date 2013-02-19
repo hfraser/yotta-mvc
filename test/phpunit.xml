@@ -17,14 +17,10 @@
 			<directory suffix="Test.php" phpVersion="5.3.4" phpVersionOperator=">=">core</directory>
 			<directory suffix="Test.php" phpVersion="5.3.4" phpVersionOperator=">=">services</directory>
 		</testsuite>
-		<testsuite name="Less PHP Test Suite">
-			<directory suffix="Test.php" phpVersion="5.3.4" phpVersionOperator=">=">../src/libs/lessphp/tests</directory>
-		</testsuite>
 	</testsuites>
 	<filter>
 		<blacklist>
 			<directory suffix=".php">../src/pages</directory>
-			<directory suffix=".php">../src/libs</directory>
 			<directory suffix=".php">../src/libs</directory>
 			<file>../src/services/SuggestionBox.php</file>
 		</blacklist>

@@ -163,12 +163,10 @@ date : ${DATE}</echo>
 		</phpdoc -->
 		<phpdoc2 title="C-mantix Ultralight Code Documentation" destdir="${docdir}" template="responsive">
 			<fileset dir="${project.basedir}/">
-				<include name="**" />
+				<include name="**.php" />
 				<exclude name="src/pages/**" />
 				<exclude name="build/**" />
-				<exclude name="**/src/libs/cssmin/**" />
-				<exclude name="**/src/libs/jsmin/**" />
-				<exclude name="**/src/libs/lessphp/**" />
+				<exclude name="src/libs/**" />
 			</fileset>
 		</phpdoc2>
 	</target>
