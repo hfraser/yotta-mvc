@@ -57,16 +57,16 @@ msgid "Bravo you submited something!!!"
 msgstr "Bravo vous avez soumis de l'information!"
 
 #: src/pages/includes/footer.inc.php:2
-msgid "Powered By Boson-MVC"
-msgstr "Alimenté par Boson-MVC"
+msgid "Powered By Yotta-MVC"
+msgstr "Alimenté par Yotta-MVC"
 
 #: src/pages/includes/header.inc.php:5
 msgid "title"
 msgstr "Titre"
 
 #: src/pages/includes/header.inc.php:9
-msgid "Boson-MVC Demo Page"
-msgstr "Page demo Boson-MVC"
+msgid "Yotta-MVC Demo Page"
+msgstr "Page demo Yotta-MVC"
 
 #: src/services/SuggestionBox.php:50
 msgid "You Need To fill this field!"

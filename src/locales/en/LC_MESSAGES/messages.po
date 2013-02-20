@@ -57,7 +57,7 @@ msgid "Bravo you submited something!!!"
 msgstr ""
 
 #: src/pages/includes/footer.inc.php:2
-msgid "Powered By Boson-MVC"
+msgid "Powered By Yotta-MVC"
 msgstr ""
 
 #: src/pages/includes/header.inc.php:5
@@ -65,7 +65,7 @@ msgid "title"
 msgstr ""
 
 #: src/pages/includes/header.inc.php:9
-msgid "Boson-MVC Demo Page"
+msgid "Yotta-MVC Demo Page"
 msgstr ""
 
 #: src/services/SuggestionBox.php:50

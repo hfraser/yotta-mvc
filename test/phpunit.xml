@@ -13,7 +13,7 @@
 	verbose="true"
 	strict="true">
 	<testsuites>
-		<testsuite name="Boson Core Basics">
+		<testsuite name="Yotta Core Basics">
 			<directory suffix="Test.php" phpVersion="5.3.4" phpVersionOperator=">=">core</directory>
 			<directory suffix="Test.php" phpVersion="5.3.4" phpVersionOperator=">=">services</directory>
 		</testsuite>

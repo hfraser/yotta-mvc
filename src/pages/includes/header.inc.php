@@ -6,4 +6,4 @@
 <?php $this->getHelper('html')->getAllCSS(); ?>
 </head>
 <body class="<?php echo($this->getData('lang')); ?>">
-<div id="header"><h1><?php echo _("Boson-MVC Demo Page"); ?></h1></div>
+<div id="header"><h1><?php echo _("Yotta-MVC Demo Page"); ?></h1></div>

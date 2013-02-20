@@ -14,8 +14,8 @@ class apthupdate{
 	}
 }
 
-# boson web node
-node 'boson.dev.local' {
+# yotta web node
+node 'yotta.dev.local' {
 	# set MOTD To identify machine!.
 	file {
 		'/etc/motd' :

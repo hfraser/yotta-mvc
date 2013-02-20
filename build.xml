@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ======================================================================
-	Boson-MVC
+	Yotta-MVC
 
-	This file contains all the base builds for Boson-MVC.
+	This file contains all the base builds for Yotta-MVC.
 	In order to use this build phing is required to be installed
 	====================================================================== -->
-<project name="Boson-MVC" default="main">
+<project name="Yotta-MVC" default="main">
 	<!-- set time stamp values -->
 	<tstamp>
 		<format property="DATE" pattern="%c" />
@@ -71,7 +71,7 @@
 				<mkdir dir="${release.dir}/" />
 			</then>
 		</if>
-		<property name="rlname" value="boson_${env.BUILD_NUMBER}" />
+		<property name="rlname" value="yotta_${env.BUILD_NUMBER}" />
 	</target>
 
 	<target name="main" depends="clean, prepare" description="build the main application">
