@@ -24,9 +24,12 @@
 class Autoload
 {
 	/**
-	 *
+	 * Test value for PHPunit.
+	 * 
+	 * @var boolean
 	 */
 	public static $test = false;
+	
 	/**
 	 * Singleton current instance
 	 *
@@ -57,7 +60,7 @@ class Autoload
 	{
 		$this->_registeredNamespaces = new \stdClass();
 
-		// add the base cmantix loaders
+		// add the base loaders
 		$this->_loaders[] = 'Autoload::namespaceAutoload';
 		$this->_loaders[] = 'Autoload::baseAutoload';
 		$this->_loaders[] = 'Autoload::libsAutoload';

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ======================================================================
-	2012-03-29 PM
+	Boson-MVC
 
-	C-Mantix-Ultralight
-
-	This file contains all the base builds for @{FD}.
+	This file contains all the base builds for Boson-MVC.
 	In order to use this build phing is required to be installed
 	====================================================================== -->
-<project name="CM-Ultralight" default="main">
+<project name="Boson-MVC" default="main">
 	<!-- set time stamp values -->
 	<tstamp>
 		<format property="DATE" pattern="%c" />
@@ -73,7 +71,7 @@
 				<mkdir dir="${release.dir}/" />
 			</then>
 		</if>
-		<property name="rlname" value="cmul_${env.BUILD_NUMBER}" />
+		<property name="rlname" value="boson_${env.BUILD_NUMBER}" />
 	</target>
 
 	<target name="main" depends="clean, prepare" description="build the main application">
@@ -147,29 +145,9 @@ date : ${DATE}</echo>
 		<echo level="info" msg="Creating PHP Documentation" />
 		<echo level="info" msg="    Creating Build Dir / docs!" />
 		<mkdir dir="${docdir}" />
-		<!-- unquote the following block for older phpdocumentor version -->
-		<!-- phpdoc title="CM-Ultralight Code Documentation" quiet="true" destdir="${docdir}" sourcecode="yes" defaultcategoryname="CM-Ultralight" defaultpackagename="CM-Ultralight" output="HTML:frames:DOM/l0l33t">
-			<fileset dir="${project.basedir}/">
-				<include name="**" />
-				<exclude name="src/pages/**" />
-				<exclude name="build/**" />
-				<exclude name="**/src/libs/cssmin/**" />
-				<exclude name="**/src/libs/jsmin/**" />
-				<exclude name="**/src/libs/lessphp/**" />
-			</fileset>
-			<projdocfileset dir=".">
-				<include name="README" />
-			</projdocfileset>
-		</phpdoc -->
-		<phpdoc2 title="C-mantix Ultralight Code Documentation" destdir="${docdir}" template="responsive">
-			<fileset dir="${project.basedir}/">
-				<include name="**/*.php" />
-				<exclude name="src/pages/**" />
-				<exclude name="build/**" />
-				<exclude name="src/libs/**" />
-				<exclude name="test/**" />
-			</fileset>
-		</phpdoc2>
+		<exec executable="phpdoc" passthru="true">
+			<arg line="-c ${project.basedir}/phpdoc.xml"/>
+		</exec>
 	</target>
 
 	<!-- PHP copy/paste analysis -->

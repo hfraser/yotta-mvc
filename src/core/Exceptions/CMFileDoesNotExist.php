@@ -1,6 +1,6 @@
 <?php
 /**
- * Base Cmantix exception CMFileDoesNotExist.
+ * Base exception CMFileDoesNotExist.
  *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
@@ -14,7 +14,7 @@
 namespace core\Exceptions;
 
 /**
- * CMFileDoesNotExist cmantix exception.
+ * CMFileDoesNotExist exception.
  *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>

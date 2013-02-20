@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-15 21:45-0400\n"
+"POT-Creation-Date: 2013-02-20 00:04-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,67 +16,87 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: src/pages/404.php:2
+#: src/pages/404.php:4 src/pages/404.php:7
 msgid "404 Page"
-msgstr ""
+msgstr "Page 404"
 
-#: src/pages/apage.php:3 src/pages/includes/header.inc.php:5
-msgid ":title"
-msgstr ""
+#: src/pages/forms/SuggestForm.php:4
+msgid "Your comments and information"
+msgstr "Vos commentaires"
 
-#: src/pages/forms/SuggestForm.php:3
+#: src/pages/forms/SuggestForm.php:6
+msgid "Name"
+msgstr "Nom"
+
+#: src/pages/forms/SuggestForm.php:8
 msgid "Your Name"
-msgstr ""
+msgstr "Votre Nom"
 
-#: src/pages/forms/SuggestForm.php:9
+#: src/pages/forms/SuggestForm.php:15
+msgid "e-mail"
+msgstr "Courriel"
+
+#: src/pages/forms/SuggestForm.php:17
 msgid "Your e-mail"
-msgstr ""
+msgstr "Votre courriel"
 
-#: src/pages/forms/SuggestForm.php:14
+#: src/pages/forms/SuggestForm.php:23
+msgid "Suggestion"
+msgstr "Suggestions"
+
+#: src/pages/forms/SuggestForm.php:25
 msgid "What the hell do you want to suggest!"
-msgstr ""
+msgstr "Que voulez vous suggérez"
 
-#: src/pages/forms/SuggestForm.php:18
+#: src/pages/forms/SuggestForm.php:31
 msgid "Send"
-msgstr ""
+msgstr "Envoyer"
 
 #: src/pages/forms/SuggestFormSuccess.php:1
-msgid "Bravo you sent something!!!"
-msgstr ""
+msgid "Bravo you submited something!!!"
+msgstr "Bravo vous avez soumis de l'information!"
 
-#: src/pages/index.php:2
-msgid "Hello Speedy!"
-msgstr ""
+#: src/pages/includes/footer.inc.php:2
+msgid "Powered By Boson-MVC"
+msgstr "Alimenté par Boson-MVC"
 
-#: src/services/SuggestionBox.php:52
+#: src/pages/includes/header.inc.php:5
+msgid "title"
+msgstr "Titre"
+
+#: src/pages/includes/header.inc.php:9
+msgid "Boson-MVC Demo Page"
+msgstr "Page demo Boson-MVC"
+
+#: src/services/SuggestionBox.php:50
 msgid "You Need To fill this field!"
-msgstr ""
+msgstr "Vous devez remplir ce champ."
 
-#: src/services/SuggestionBox.php:53
+#: src/services/SuggestionBox.php:51
 msgid "You need to fill this field properly!"
-msgstr ""
+msgstr "Vous avez mal remplis ce champ."
 
-#: src/services/SuggestionBox.php:56
+#: src/services/SuggestionBox.php:54
 msgid "You Need To fill your name in!"
-msgstr ""
+msgstr "Vous devez entrez votre nom."
 
-#: src/services/SuggestionBox.php:57
+#: src/services/SuggestionBox.php:55
 msgid "You need to fill your name properly!"
-msgstr ""
+msgstr "Vous devez entrez votre vrai nom."
 
-#: src/services/SuggestionBox.php:60
+#: src/services/SuggestionBox.php:58
 msgid "You Need To fill your email!"
-msgstr ""
+msgstr "Vous devez entrer votre courriel."
 
-#: src/services/SuggestionBox.php:61
+#: src/services/SuggestionBox.php:59
 msgid "You need to fill your email properly!"
-msgstr ""
+msgstr "Révisé votre courriel est mal entré."
 
-#: src/services/SuggestionBox.php:64
+#: src/services/SuggestionBox.php:62
 msgid "You Need To add a suggestion!"
-msgstr ""
+msgstr "Ajoutez une suggestion."
 
-#: src/services/SuggestionBox.php:65
+#: src/services/SuggestionBox.php:63
 msgid ""
 "Your suggestion must be at least 3 characters long and not longer then 1000!"
-msgstr ""
+msgstr "Votre suggestion doit être d'au moin 3 caractères et pas plus de 1000."

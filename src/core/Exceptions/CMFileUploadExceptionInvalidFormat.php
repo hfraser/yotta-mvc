@@ -1,6 +1,6 @@
 <?php
 /**
- * Base Cmantix exception CMFileUploadExceptionInvalidFormat.
+ * Base exception CMFileUploadExceptionInvalidFormat.
  *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
@@ -14,7 +14,7 @@
 namespace core\Exceptions;
 
 /**
- * CMFileUploadExceptionInvalidFormat cmantix exception.
+ * CMFileUploadExceptionInvalidFormat exception.
  *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
