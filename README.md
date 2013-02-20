@@ -1,5 +1,7 @@
-C-Mantix Ultralight
-===================
+Boson-MVC
+=========
+
+Micro PHP-MVC fast development tool.
 
  * Copyright : Hans-Frederic Fraser hffraser@gmail.com
  * License : GPL-V3
