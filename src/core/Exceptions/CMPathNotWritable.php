@@ -1,6 +1,6 @@
 <?php
 /**
- * Base Cmantix exception CMPathNotWritable.
+ * Base exception CMPathNotWritable.
  *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
@@ -14,8 +14,8 @@
 namespace core\Exceptions;
 
 /**
- * CMPathNotWritable cmantix exception.
- *
+ * CMPathNotWritable exception.
+ * 
  * This class takes care of all base operations for form handling.
  * It contains validation of forms and base definitions.
  *

@@ -1,6 +1,16 @@
 #!/usr/bin/php
 <?php
-// Used to clear caches
+/**
+ * Cache Clear (All Caches).
+ *
+ * @version    Release: 1.0
+ * @author     Hans-Frederic Fraser <hffraser@gmail.com>
+ * @copyright  2012 Hans-Frederic Fraser
+ * @license    http://www.gnu.org/licenses/gpl-3.0-standalone.html gpl-3.0
+ * @category   Core
+ * @package    bin
+ * @filesource
+ */
 
 // validate that we are running from a shell command
 if (!defined('STDIN')) {

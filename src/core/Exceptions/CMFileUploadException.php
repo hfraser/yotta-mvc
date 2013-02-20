@@ -1,6 +1,6 @@
 <?php
 /**
- * Base Cmantix exception CMFileUploadException.
+ * Base exception CMFileUploadException.
  *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>
@@ -14,7 +14,7 @@
 namespace core\Exceptions;
 
 /**
- * CMFileUploadException cmantix exception.
+ * CMFileUploadException exception.
  *
  * @version    Release: 1.0
  * @author     Hans-Frederic Fraser <hffraser@gmail.com>

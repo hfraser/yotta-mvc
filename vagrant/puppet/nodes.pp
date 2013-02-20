@@ -14,8 +14,8 @@ class apthupdate{
 	}
 }
 
-# c-mantix web node
-node 'cmantix.dev.local' {
+# boson web node
+node 'boson.dev.local' {
 	# set MOTD To identify machine!.
 	file {
 		'/etc/motd' :

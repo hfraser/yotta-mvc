@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdoc>
-	<title>C-Mantix Ultralight</title>
+	<title>Boson-MVC Documentation</title>
 	<parser>
 		<target>build/docs/</target>
-		<default-package-name>CmantixUl</default-package-name>
+		<default-package-name>Boson-MVC</default-package-name>
 		 <extensions>
             <extension>php</extension>
             <extension>phtml</extension>
@@ -23,7 +23,7 @@
 		<file>bin/*</file>
 		<file>bin/cmantix</file>
 		<directory>src</directory>
-		<ignore>*/R.php</ignore>
+		<ignore>src/libs/*</ignore>
 		<ignore>src/pages/*</ignore>
 		<ignore>src/public/index.php</ignore>
 	</files>

@@ -26,6 +26,11 @@ use core\Url;
  */
 class FormHelper
 {
+	/**
+	 * Error container.
+	 * 
+	 * @var \stdClass
+	 */
 	protected $_errors;
 	
 	/**

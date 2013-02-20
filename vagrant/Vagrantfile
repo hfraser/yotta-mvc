@@ -26,6 +26,6 @@ Vagrant::Config.run do |config|
   config.vm.define :web01 do |config|
     config.vm.box = "precise64"
     config.vm.network :hostonly, "192.168.99.33"
-    config.vm.host_name = "cmantix.dev.local"
+    config.vm.host_name = "boson.dev.local"
   end
 end
