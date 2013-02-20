@@ -71,7 +71,7 @@
 				<mkdir dir="${release.dir}/" />
 			</then>
 		</if>
-		<property name="rlname" value="cmul_${env.BUILD_NUMBER}" />
+		<property name="rlname" value="boson_${env.BUILD_NUMBER}" />
 	</target>
 
 	<target name="main" depends="clean, prepare" description="build the main application">
