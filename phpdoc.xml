@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <phpdoc>
-	<title>Boson-MVC Documentation</title>
+	<title>Yotta-MVC Documentation</title>
 	<parser>
 		<target>build/docs/</target>
-		<default-package-name>Boson-MVC</default-package-name>
+		<default-package-name>Yotta-MVC</default-package-name>
 		 <extensions>
             <extension>php</extension>
             <extension>phtml</extension>
